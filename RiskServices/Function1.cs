@@ -21,31 +21,37 @@ namespace RiskServices
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            //string name = req.Query["name"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            string queryString =  data?.queryString;
-
-            if (string.IsNullOrEmpty(queryString))
+            try
             {
-                return new BadRequestObjectResult("Please specify a query");
-            }
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                string queryString = data?.queryString;
 
-            StringBuilder outputBuilder = new StringBuilder();
-
-            string connectionString = ConnectionBuilder.GetSQLConnectionString();
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(queryString, connection))
+                if (string.IsNullOrEmpty(queryString))
                 {
-                    command.Connection.Open();
-                    command.ExecuteNonQuery();
+                    return new BadRequestObjectResult("Please specify a query");
                 }
+
+                StringBuilder outputBuilder = new StringBuilder(ConnectionBuilder.GetSQLConnectionString());
+
+                string connectionString = ConnectionBuilder.GetSQLConnectionString();
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(queryString, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                return new OkObjectResult(outputBuilder.ToString());
+
+            }
+            catch(Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
             }
 
-            return new OkObjectResult(outputBuilder.ToString());
         }
     }
 }
