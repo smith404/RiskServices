@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FRMDesktop", "FRMDesktop\FRMDesktop.csproj", "{4F1BBA36-4C62-41BC-B4E1-3DED56F562E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiskServices", "RiskServices\RiskServices.csproj", "{4465B138-49CB-4B87-AF9E-2577482AFE44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RiskServices", "RiskServices\RiskServices.csproj", "{4465B138-49CB-4B87-AF9E-2577482AFE44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

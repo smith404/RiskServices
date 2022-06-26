@@ -23,5 +23,23 @@ namespace RiskServices
 
             return connectionString.ToString();
         }
+
+        public static string GetStorageAccountConnectionString()
+        {
+            StringBuilder connectionString = new StringBuilder("DefaultEndpointsProtocol=");
+
+            connectionString.Append(Environment.GetEnvironmentVariable("storage-account-protocol"));
+            connectionString.Append(";AccountName=");
+            connectionString.Append(Environment.GetEnvironmentVariable("storage-account-name"));
+            connectionString.Append(";AccountKey=");
+            connectionString.Append(Environment.GetEnvironmentVariable("storage-account-key"));
+
+#if LOCAL
+            connectionString.Append(";BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;");
+#endif
+
+            return connectionString.ToString();
+        }
+
     }
 }
