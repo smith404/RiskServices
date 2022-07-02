@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RiskServices
 {
@@ -18,8 +15,13 @@ namespace RiskServices
             connectionString.Append(Environment.GetEnvironmentVariable("sql-connection-inital-catalogue"));
             connectionString.Append(";User Id=");
             connectionString.Append(Environment.GetEnvironmentVariable("sql-connection-user"));
+#if LOCAL
             connectionString.Append(";Password=");
             connectionString.Append(Environment.GetEnvironmentVariable("sql-connection-password"));
+#else
+            connectionString.Append(";Password=");
+            connectionString.Append(Environment.GetEnvironmentVariable("sql-connection-password"));
+#endif
 
             return connectionString.ToString();
         }
