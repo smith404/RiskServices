@@ -15,6 +15,12 @@ namespace RiskServices
 {
     public static class ToolExecutionOperations
     {
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
         [FunctionName("ToolExecutionOperations")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", "delete", Route = null)] HttpRequest req,
@@ -57,7 +63,7 @@ namespace RiskServices
                             QueueServiceClient queueServiceClient = StorageAccountHelper.GetQueueServiceClient();
                             string queue = Environment.GetEnvironmentVariable("storage-account-tool-queue");
                             QueueClient queueClient = StorageAccountHelper.GetQueueClient(queueServiceClient, queue);
-                            queueClient.SendMessage(item.GUID);
+                            queueClient.SendMessage(Base64Encode(item.GUID));
                         }
 
                         OkObjectResult result = new OkObjectResult(item);

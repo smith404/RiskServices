@@ -28,7 +28,29 @@ namespace RiskServices
                     {
                         string eid = req.Query["eid"];
                         long.TryParse(eid, out long id);
-                        ToolStep item = await context.ToolSteps.FindAsync(id);
+
+                        ToolStep item;
+
+                        // Special case of a get call for a new object
+                        if (id == -1)
+                        {
+                            item = new ToolStep
+                            {
+                                Description = "New Step",
+                                StepType = "TBD",
+                                Definition = "New Step",
+                                HasOutput = true,
+                                TestObject = "",
+                                DatasetName = "dataset",
+                                Message = "New Step",
+                                Format = "TDB",
+                                Active = true,
+                        };
+                    }
+                    else
+                        {
+                            item = await context.ToolSteps.FindAsync(id);
+                        }
 
                         OkObjectResult result = new OkObjectResult(item);
                         result.ContentTypes.Add("application/json");

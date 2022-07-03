@@ -42,6 +42,10 @@ namespace RiskServices.model
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
 
+        [StringLength(255)]
+        [JsonProperty(PropertyName = "url")]
+        public string URL { get; set; }
+
         [Required]
         [JsonProperty(PropertyName = "version")]
         public byte Version { get; set; }
@@ -137,6 +141,9 @@ namespace RiskServices.model
         [Required]
         [JsonProperty(PropertyName = "definition")]
         public string Definition { get; set; }
+
+        [JsonProperty(PropertyName = "test_object")]
+        public string TestObject { get; set; }
 
         [Required]
         [JsonProperty(PropertyName = "in_memory")]
