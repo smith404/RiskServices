@@ -16,4 +16,8 @@
     <Folder Include="model\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FRMObjects\FRMObjects.csproj" />
+  </ItemGroup>
+
 </Project>

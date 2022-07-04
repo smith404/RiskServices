@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using Microsoft.Azure.Storage.Queue;
+using FRMObjects.model;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using RiskServices.model;
+using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace RiskServices
 {

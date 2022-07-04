@@ -1,18 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RiskServices.model
+namespace FRMObjects.model
 {
     public class FRMContext : DbContext
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public DbSet<ToolDefinition> ToolDefinitions { get; set; }
 
         public DbSet<ToolStep> ToolSteps { get; set; }
 
         public DbSet<ToolExecutionLog> ToolExecutionLogs { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,6 +28,14 @@ namespace RiskServices.model
     [Table("ToolDefinition", Schema = "dbo")]
     public class ToolDefinition
     {
+        public ToolDefinition()
+        {
+            this.ToolName = "";
+            this.Description = "";
+            this.URL = "";
+            this.Status = 'N';
+        }
+
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonProperty(PropertyName = "id")]
@@ -58,9 +67,12 @@ namespace RiskServices.model
     [Table("ToolExecutionLog", Schema = "dbo")]
     public class ToolExecutionLog
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public ToolExecutionLog()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             this.GUID = Guid.NewGuid().ToString();
+            this.RunConfiguration = "";
             this.Persist = true;
             this.ExitOnFail = true;
             this.Status = 'N';
@@ -84,7 +96,6 @@ namespace RiskServices.model
         public string RunConfiguration { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        [Required]
         [JsonProperty(PropertyName = "requestor")]
         public string Requestor { get; set; }
 
@@ -123,6 +134,18 @@ namespace RiskServices.model
     [Table("ToolStep", Schema = "dbo")]
     public class ToolStep
     {
+        public ToolStep()
+        {
+            this.Description = "";
+            this.StepType = "";
+            this.Definition = "";
+            this.TestObject = "";
+            this.DatasetName = "";
+            this.Message = "";
+            this.Format = "";
+            this.Active = true;
+        }
+
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonProperty(PropertyName = "id")]

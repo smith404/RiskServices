@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Text;
 
-namespace RiskServices.model
+namespace FRMObjects.model
 {
     public class BaseModelObject
     {
-        private PropertyInfo[] _PropertyInfos = null;
+        private PropertyInfo[]? _PropertyInfos = null;
 
         public override string ToString()
         {
