@@ -7,9 +7,9 @@ namespace FRMDesktop.Controllers
     [Route("api/[controller]")]
     public class SearchItemController : Controller
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<SearchItemController> _logger;
 
-        public SearchItemController(ILogger<WeatherForecastController> logger)
+        public SearchItemController(ILogger<SearchItemController> logger)
         {
             _logger = logger;
         }
@@ -23,8 +23,8 @@ namespace FRMDesktop.Controllers
                 Title = "Best Ever Home Page",
                 KeyWords = "The Best Ever Home Page",
                 Summary = "The Best Ever Home Page",
-                TargetType = "Page",
-                Target = "www.google.com"
+                TargetType = "FAQ",
+                Target = "https://www.google.com"
             })
             .ToArray();
         }

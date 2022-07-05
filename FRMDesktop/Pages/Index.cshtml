@@ -3,29 +3,31 @@
 @{
     ViewData["Title"] = "FRM Hub";
 }
-<script type="text/javascript" src="~/js//d3.v7.min.js"></script>
 <script type="text/javascript" src="~/js/flexsearch.min.js"></script>
 
 <div ng-app="frmHubApp">
     <script type="text/javascript">
         const app = angular.module("frmHubApp", ['ngSanitize']);
+
         const search = {};
 
-        search.init = () => {
-            d3.json('/api/SearchItem')
-            .then(pages => {
-                search.pages = pages;
-                search.index = new FlexSearch({ doc: { id: 'target', field: ['title', 'key_words'] } })
-                search.index.add(pages);
+        search.init = search.init = source => {
+            search.source = source;
+            $.ajax({
+                url: source
+            }).then(function (response) {
+                search.pages = response;
+                search.index = new FlexSearch({ doc: { id: 'target', field: ['title', 'keyWords'] } })
+                search.index.add(response);    
+            }, function(response) {
+                console.log(response);
             });
-            d3.select('.frm-search').on('keyup search', () => search.query(d3.event.target.value));
         };
 
-        search.query = keywords => {
-            const results = search.index.search(keywords.trim()).slice(0, 9);
+        search.perfromLocalSearch = keywords => {
+            const results = search.index.search(keywords.trim()).slice(0,9);
 
-            document.querySelector('.search-results-include')
-            .classList.toggle('is-hidden', results.length === 0);
+            document.querySelector('.search-results-include').classList.toggle('is-hidden', results.length === 0);
 
             const render = d => `
                 <div>
@@ -35,8 +37,8 @@
                 <div class="search-results-include-grid-item-summary">
                 ${d.summary && d.summary.length > 0 ? d.summary.substring(0, 90) : "No summary found for this page"}...
                 </div>
-                <span class="label label-${d.target_type}">
-                ${d.target_type}
+                <span class="label label-${d.targetType.toLowerCase()}">
+                ${d.targetType}
                 </span>
                 </div>
             `;
@@ -49,7 +51,7 @@
             document.querySelector('.frm-search').value = "";
         }
 
-        function insertSearchResult(result) {
+        search.insertSearchResult = result => {
             control = '<div class="search-result-line hr-line-dashed"></div>' +
                 '<div class="search-result"><a href="' + result.target + '"><img src="/images/search/'
                 + result.typeName + '.png" alt="'
@@ -67,7 +69,7 @@
             $('#result-list').append(control)
         }
 
-        function insertSearchResultSummary(searchTerm, numResults) {
+        search.insertSearchResultSummary = (searchTerm, numResults) => {
             control = '<div class="search-result-line hr-line-dashed"></div>' +
                 '<div class="search-result">' +
                 '<p>Your search for : <I>' + searchTerm + '</I><p>' +
@@ -77,25 +79,21 @@
             $('#result-list').append(control)
         }
 
-        function perfromSearch() {
-            var searchTerm = $("#search-input").val();
-            colsole.log("Hi Ya!")
+        search.perfromServerSearch = searchTerm => {
             if (searchTerm !== "") {
                 // Clear the old search results
                 $('.search-result').remove();
                 $('.search-result-line').remove();
                 $.ajax({
-                    url: "/URL/search?searchterm=" + searchTerm
+                    url: search.source
                 }).then(function (data) {
-
-                    insertSearchResultSummary(searchTerm, data.length);
+                    search.insertSearchResultSummary(searchTerm, data.length);
                     data.sort(function (a, b) { return b.score - a.score });
                     for (var i = 0; i < data.length; i++) {
                         var result = data[i];
-                        insertSearchResult(result);
+                        search.insertSearchResult(result);
                     }
                 });
-
                 // Clear the search input
                 search.close()
             }
@@ -109,12 +107,14 @@
     
         app.controller("frmHubCtrl", function ($scope, $http) {
 
-            search.init();
+            search.init('/api/SearchItem');
 
-            $("#search-input").keydown(function(e) {
-                if(e.keyCode == 13)
-                {
-                    perfromSearch();
+            $("#search-input").keyup(function(e) {
+                if (e.keyCode == 13) {
+                    search.perfromServerSearch(e.target.value);
+                }
+                else {
+                    search.perfromLocalSearch(e.target.value)
                 }
             });
         });
@@ -128,14 +128,16 @@
         </div>
         <div class="row">
             <div class="col">
-                <input id="search-input" class="form-control form-control form-control-borderless"
-                        type="search"
-                        placeholder="Search topics or keywords">
-            </div>
-            <div class="col-auto">
-                <button class="btn btn btn-info" onclick="perfromSearch()">
-                    <i class="fa fa-search"></i> Search
-                </button>
+                <div class="input-group">
+                    <input id="search-input" class="frm-search"
+                            type="search"
+                            placeholder="Search topics or keywords">
+                    <div class="input-group-append">
+                        <button class="btn btn btn-info" onclick="perfromSearch()">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row search-results-include is-hidden">
