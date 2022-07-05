@@ -3,10 +3,103 @@
 @{
     ViewData["Title"] = "FRM Hub";
 }
+<script type="text/javascript" src="~/js//d3.v7.min.js"></script>
+<script type="text/javascript" src="~/js/flexsearch.min.js"></script>
 
 <div ng-app="frmHubApp">
     <script type="text/javascript">
         const app = angular.module("frmHubApp", ['ngSanitize']);
+        const search = {};
+
+        search.init = () => {
+            d3.json('/api/SearchItem')
+            .then(pages => {
+                search.pages = pages;
+                search.index = new FlexSearch({ doc: { id: 'target', field: ['title', 'key_words'] } })
+                search.index.add(pages);
+            });
+            d3.select('.frm-search').on('keyup search', () => search.query(d3.event.target.value));
+        };
+
+        search.query = keywords => {
+            const results = search.index.search(keywords.trim()).slice(0, 9);
+
+            document.querySelector('.search-results-include')
+            .classList.toggle('is-hidden', results.length === 0);
+
+            const render = d => `
+                <div>
+                <a href="${d.target}">
+                <h3>${d.title}</h3>
+                </a>
+                <div class="search-results-include-grid-item-summary">
+                ${d.summary && d.summary.length > 0 ? d.summary.substring(0, 90) : "No summary found for this page"}...
+                </div>
+                <span class="label label-${d.target_type}">
+                ${d.target_type}
+                </span>
+                </div>
+            `;
+
+            document.querySelector('.search-results-include-grid').innerHTML = results.map(render).join('');
+        };
+
+        search.close = () => {
+            document.querySelector('.search-results-include').classList.toggle('is-hidden', true);
+            document.querySelector('.frm-search').value = "";
+        }
+
+        function insertSearchResult(result) {
+            control = '<div class="search-result-line hr-line-dashed"></div>' +
+                '<div class="search-result"><a href="' + result.target + '"><img src="/images/search/'
+                + result.typeName + '.png" alt="'
+                + result.typeName
+                + '" style="float:left;width:80px;height:80px;margin-right:15px;"/></a>' +
+                '<h3><a href="' + result.target + '">' + result.title + '</a></h3>' +
+                '<p>' + result.summary + '</p>';
+
+            if (result.score != -1) {
+                control = control + '<p><I>With a relevance score of ' + result.score + '</I><p>'
+            }
+
+            control = control + '</div>';
+
+            $('#result-list').append(control)
+        }
+
+        function insertSearchResultSummary(searchTerm, numResults) {
+            control = '<div class="search-result-line hr-line-dashed"></div>' +
+                '<div class="search-result">' +
+                '<p>Your search for : <I>' + searchTerm + '</I><p>' +
+                '<p> returned <B>' + numResults + '</B> result(s)</p>' +
+                '</div>';
+
+            $('#result-list').append(control)
+        }
+
+        function perfromSearch() {
+            var searchTerm = $("#search-input").val();
+            colsole.log("Hi Ya!")
+            if (searchTerm !== "") {
+                // Clear the old search results
+                $('.search-result').remove();
+                $('.search-result-line').remove();
+                $.ajax({
+                    url: "/URL/search?searchterm=" + searchTerm
+                }).then(function (data) {
+
+                    insertSearchResultSummary(searchTerm, data.length);
+                    data.sort(function (a, b) { return b.score - a.score });
+                    for (var i = 0; i < data.length; i++) {
+                        var result = data[i];
+                        insertSearchResult(result);
+                    }
+                });
+
+                // Clear the search input
+                search.close()
+            }
+        }
 
         app.config(function($locationProvider,$interpolateProvider){
             $locationProvider.html5Mode({
@@ -15,66 +108,46 @@
         });
     
         app.controller("frmHubCtrl", function ($scope, $http) {
+
+            search.init();
+
+            $("#search-input").keydown(function(e) {
+                if(e.keyCode == 13)
+                {
+                    perfromSearch();
+                }
+            });
         });
     </script>
     <div class="container-fluid" ng-controller="frmHubCtrl" role="main">
-        <div class="card h-100 mb-4">
-            <div class="card-header">
-                <ul class="nav nav-tabs nav-fill" id="iris-list" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#searchtab" role="tab" aria-controls="searchtab"
-                           aria-selected="true">Search our Knowledge Base</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#requesttab" role="tab" aria-controls="requesttab" aria-selected="false">Raise
-                            a Request</a>
-                    </li>
-                </ul>
+        <div class="row">
+            <div class="col">
+                <h4>Financial Risk Management Hub</h4>
+                <h6>Search for help or find the tools you need for your task raise a support request</h6>
             </div>
-            <div class="card-body iris-tabs">
-                <h4 class="card-title">Financial Risk Management Hub</h4>
-                <h6 class="card-subtitle mb-2">Search for help or find the tools you need for your task
-                    raise a support request</h6>
-                <div class="tab-content mt-3">
-                    <div class="tab-pane active" id="searchtab" role="tabpanel" aria-labelledby="searchtab-tab">
-                        <form class="card card-sm">
-                            <div class="card-body">
-                                <div class="card-title row no-gutters align-items-center">
-                                    <div class="col">
-                                        <input id="search-input" class="form-control form-control form-control-borderless"
-                                               type="search"
-                                               placeholder="Search topics or keywords">
-                                    </div>
-                                    <div class="col-auto">
-                                        <button class="btn btn btn-info" onclick="perfromSearch()">
-                                            <i class="fa fa-search"></i> Search
-                                        </button>
-                                    </div>
-                                </div>
-                                <div id="iris-chat" class="card-body iris-chat">
-                                    <div id="result-list" class="result-list">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="tab-pane" id="requesttab" role="tabpanel" aria-labelledby="requesttab-tab">
-                        <form class="card card-sm">
-                            <div class="card-body row no-gutters align-items-center">
-                                <div class="col">
-                                    <select id="entitytype" class="form-control" ng-model="request.entityType"
-                                            ng-options="type as type.name for type in entitytypes track by type.id">
-                                    </select>
-                                </div>
-                                <div class="col-auto">
-                                    <button class="btn btn btn-info" ng-click="openRequestDialog()">
-                                        <i class="fa fa-bell"></i> Raise a Request
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="search-input" class="form-control form-control form-control-borderless"
+                        type="search"
+                        placeholder="Search topics or keywords">
+            </div>
+            <div class="col-auto">
+                <button class="btn btn btn-info" onclick="perfromSearch()">
+                    <i class="fa fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+        <div class="row search-results-include is-hidden">
+            <div class="search-results-include-content">
+                <a class="search-results-include-close-button" href="javascript:search.close()"></a>
+                <h2>Search results</h2>
+                <div class="search-results-include-grid"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="result-list" id="result-list"></div>
             </div>
         </div>
     </div>

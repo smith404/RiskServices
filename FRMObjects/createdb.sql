@@ -23,12 +23,13 @@ CREATE TABLE [dbo].[HubPageSection] (
     CONSTRAINT [FK_HubPageSection_HubPage] FOREIGN KEY ([HubPageId]) REFERENCES [dbo].[HubPage] ([Id])
 );
 
-CREATE TABLE [dbo].[SearchableItems] (
+CREATE TABLE [dbo].[SearchableItem] (
     [Id]         BIGINT         IDENTITY (1000, 1) NOT NULL,
     [Title]      NVARCHAR (50)  NOT NULL,
     [Keywords]   NVARCHAR (MAX) NOT NULL,
-    [Summary]    NVARCHAR (90) NOT NULL,
-    [TargetType] NVARCHAR (12)  NOT NULL
+    [Summary]    NVARCHAR (90)  NOT NULL,
+    [TargetType] NVARCHAR (12)  NOT NULL,
+    [Taget]      NVARCHAR (255) NOT NULL
 );
 
 CREATE TABLE [dbo].[ToolDefinition] (
