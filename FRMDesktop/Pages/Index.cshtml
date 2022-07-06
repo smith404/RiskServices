@@ -107,7 +107,7 @@
     
         app.controller("frmHubCtrl", function ($scope, $http) {
 
-            search.init('/api/SearchItem');
+            search.init('/api/SearchItem/GetItems');
 
             $("#search-input").keyup(function(e) {
                 if (e.keyCode == 13) {

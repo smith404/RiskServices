@@ -14,7 +14,7 @@ namespace FRMDesktop.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetSearchableItems")]
+        [HttpGet("GetItems")]
         public IEnumerable<SearchableItem> Get()
         {
             return Enumerable.Range(1, 1).Select(index => new SearchableItem

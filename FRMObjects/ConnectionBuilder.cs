@@ -5,7 +5,6 @@ namespace FRMObjects
 {
     public class ConnectionBuilder
     {
-
         public static string GetSQLConnectionString()
         {
             StringBuilder connectionString = new StringBuilder("Data Source=");
@@ -22,7 +21,6 @@ namespace FRMObjects
             connectionString.Append(";Password=");
             connectionString.Append(Environment.GetEnvironmentVariable("sql-connection-password"));
 #endif
-
             return connectionString.ToString();
         }
 
@@ -35,11 +33,9 @@ namespace FRMObjects
             connectionString.Append(Environment.GetEnvironmentVariable("storage-account-name"));
             connectionString.Append(";AccountKey=");
             connectionString.Append(Environment.GetEnvironmentVariable("storage-account-key"));
-
 #if LOCAL
             connectionString.Append(";BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;");
 #endif
-
             return connectionString.ToString();
         }
 

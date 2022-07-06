@@ -14,17 +14,12 @@ namespace FRMDesktop.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [HttpGet(Name = "GetToolStepItems")]
+        [HttpGet("GetToolSteps")]
         public ToolStep? Get(long id)
         {
             using (FRMContext context = new())
             {
-                ToolStep item;
+                ToolStep? item;
 
                 // Special case of a get call for a new object
                 if (id == -1)
@@ -44,26 +39,7 @@ namespace FRMDesktop.Controllers
                 }
                 else
                 {
-                    ToolStep? tempItem = context.ToolSteps.Find(id);
-                    if (tempItem == null)
-                    {
-                        item = new ToolStep
-                        {
-                            Description = "New Step",
-                            StepType = "TBD",
-                            Definition = "New Step",
-                            HasOutput = true,
-                            TestObject = "",
-                            DatasetName = "dataset",
-                            Message = "New Step",
-                            Format = "TDB",
-                            Active = true,
-                        };
-                    }
-                    else
-                    {
-                        item = tempItem;
-                    }
+                    item = context.ToolSteps.Find(id);
                 }
 
                 return item;
