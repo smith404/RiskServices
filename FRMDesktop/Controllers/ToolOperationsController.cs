@@ -120,7 +120,9 @@ namespace FRMDesktop.Controllers
                     if (container != null)
                     {
                         BlobContainerClient containerClient = StorageAccountHelper.GetBlobContainerClient(blobServiceClient, container);
+#pragma warning disable CS8604 // Possible null reference argument.
                         StorageAccountHelper.WriteContentToBlob(containerClient, item.GUID.ToString(), "request.json", item.RunConfiguration);
+#pragma warning restore CS8604 // Possible null reference argument.
                     }
 
                     // Put execution message on queue
@@ -129,7 +131,9 @@ namespace FRMDesktop.Controllers
                     if (queue != null)
                     {
                         QueueClient queueClient = StorageAccountHelper.GetQueueClient(queueServiceClient, queue);
+#pragma warning disable CS8604 // Possible null reference argument.
                         queueClient.SendMessage(Base64Encode(item.GUID.ToString()));
+#pragma warning restore CS8604 // Possible null reference argument.
                     }
                 }
             }

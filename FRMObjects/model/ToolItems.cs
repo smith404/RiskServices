@@ -103,10 +103,10 @@ namespace FRMObjects.model
         public DateTime RequestedTimestamp { get; set; }
 
         [JsonProperty(PropertyName = "run_start_timestamp")]
-        public DateTime RunStartTimestamp { get; set; }
+        public DateTime? RunStartTimestamp { get; set; }
 
         [JsonProperty(PropertyName = "run_end_timestamp")]
-        public DateTime RunEndTimestamp { get; set; }
+        public DateTime? RunEndTimestamp { get; set; }
     }
 
     [Table("ToolStep", Schema = "dbo")]
