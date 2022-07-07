@@ -1,4 +1,5 @@
 using Azure.Storage.Blobs;
+using FRMObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;

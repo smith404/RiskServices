@@ -27,4 +27,12 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllers();
 
+// Set up the environment
+string keyString = builder.Configuration.GetValue<string>("sync-vars");
+string[] keys = keyString.Split(';');
+foreach(string key in keys)
+{
+    Environment.SetEnvironmentVariable(key, builder.Configuration.GetValue<string>(key));
+}
+
 app.Run();

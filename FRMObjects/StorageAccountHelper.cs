@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RiskServices
+namespace FRMObjects
 {
     public class StorageAccountHelper
     {
@@ -109,6 +109,33 @@ namespace RiskServices
             }
         }
 
+        public static bool WriteContentToBlob(BlobContainerClient containerClient, string guid, string filename, string content)
+        {
+            try
+            {
+                string localPath = Path.GetTempPath();
+                string localFileName = guid + "_" + filename;
+                string localFilePath = Path.Combine(localPath, localFileName);
+
+                BlobClient blobClient = containerClient.GetBlobClient(guid + "/" + filename);
+
+                // Write text to the file
+                File.WriteAllText(localFilePath, content);
+
+                // Upload data from local file
+                blobClient.Upload(localFilePath, true);
+
+                // Clean up
+                File.Delete(localFilePath);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static async Task<bool> DumpDataTableToBlobAsync(BlobContainerClient containerClient, DataTable table, string guid, string filename, string delimiter = ",")
         {
             if (table == null)
@@ -144,7 +171,7 @@ namespace RiskServices
                         foreach (DataRow row in table.Rows)
                         {
                             first = true;
-                            foreach (object item in row.ItemArray)
+                            foreach (object? item in row.ItemArray)
                             {
                                 if (!first)
                                 {
@@ -154,7 +181,7 @@ namespace RiskServices
                                 {
                                     first = false;
                                 }
-                                await file.WriteAsync(item.ToString());
+                                await file.WriteAsync((item != null) ? item.ToString() : "");
                             }
                             await file.WriteLineAsync();
                         }

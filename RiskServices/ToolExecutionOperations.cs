@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using FRMObjects.model;
 using Azure.Storage.Blobs;
 using Azure.Storage.Queues;
+using FRMObjects;
 
 namespace RiskServices
 {
@@ -57,13 +58,13 @@ namespace RiskServices
                             BlobServiceClient blobServiceClient = StorageAccountHelper.GetBlobServiceClient();
                             string container = Environment.GetEnvironmentVariable("storage-account-blob-container");
                             BlobContainerClient containerClient = StorageAccountHelper.GetBlobContainerClient(blobServiceClient, container);
-                            await StorageAccountHelper.WriteContentToBlobAsync(containerClient, item.GUID, "request.json", item.RunConfiguration);
+                            await StorageAccountHelper.WriteContentToBlobAsync(containerClient, item.GUID.ToString(), "request.json", item.RunConfiguration);
 
                             // Put execution message on queue
                             QueueServiceClient queueServiceClient = StorageAccountHelper.GetQueueServiceClient();
                             string queue = Environment.GetEnvironmentVariable("storage-account-tool-queue");
                             QueueClient queueClient = StorageAccountHelper.GetQueueClient(queueServiceClient, queue);
-                            queueClient.SendMessage(Base64Encode(item.GUID));
+                            queueClient.SendMessage(Base64Encode(item.GUID.ToString()));
                         }
 
                         OkObjectResult result = new OkObjectResult(item);

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using FRMObjects;
 using FRMObjects.model;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace RiskServices
             {
                 string guid = theQueueItem.AsString;
 
-                ToolExecutionLog item = context.ToolExecutionLogs.First(u => u.GUID == guid);
+                ToolExecutionLog item = context.ToolExecutionLogs.First(u => u.GUID.ToString() == guid);
                 if (item != null)
                 {
                     item.Status = 'P';

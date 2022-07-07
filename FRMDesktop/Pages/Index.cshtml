@@ -47,56 +47,7 @@
         };
 
         search.close = () => {
-            document.querySelector('.search-results-include').classList.toggle('is-hidden', true);
             document.querySelector('.frm-search').value = "";
-        }
-
-        search.insertSearchResult = result => {
-            control = '<div class="search-result-line hr-line-dashed"></div>' +
-                '<div class="search-result"><a href="' + result.target + '"><img src="/images/search/'
-                + result.typeName + '.png" alt="'
-                + result.typeName
-                + '" style="float:left;width:80px;height:80px;margin-right:15px;"/></a>' +
-                '<h3><a href="' + result.target + '">' + result.title + '</a></h3>' +
-                '<p>' + result.summary + '</p>';
-
-            if (result.score != -1) {
-                control = control + '<p><I>With a relevance score of ' + result.score + '</I><p>'
-            }
-
-            control = control + '</div>';
-
-            $('#result-list').append(control)
-        }
-
-        search.insertSearchResultSummary = (searchTerm, numResults) => {
-            control = '<div class="search-result-line hr-line-dashed"></div>' +
-                '<div class="search-result">' +
-                '<p>Your search for : <I>' + searchTerm + '</I><p>' +
-                '<p> returned <B>' + numResults + '</B> result(s)</p>' +
-                '</div>';
-
-            $('#result-list').append(control)
-        }
-
-        search.perfromServerSearch = searchTerm => {
-            if (searchTerm !== "") {
-                // Clear the old search results
-                $('.search-result').remove();
-                $('.search-result-line').remove();
-                $.ajax({
-                    url: search.source
-                }).then(function (data) {
-                    search.insertSearchResultSummary(searchTerm, data.length);
-                    data.sort(function (a, b) { return b.score - a.score });
-                    for (var i = 0; i < data.length; i++) {
-                        var result = data[i];
-                        search.insertSearchResult(result);
-                    }
-                });
-                // Clear the search input
-                search.close()
-            }
         }
 
         app.config(function($locationProvider,$interpolateProvider){
@@ -120,7 +71,7 @@
         });
     </script>
     <div class="container-fluid" ng-controller="frmHubCtrl" role="main">
-        <div class="row">
+        <div class="row" style="padding-top: 100px">
             <div class="col">
                 <h4>Financial Risk Management Hub</h4>
                 <h6>Search for help or find the tools you need for your task raise a support request</h6>
@@ -145,11 +96,6 @@
                 <a class="search-results-include-close-button" href="javascript:search.close()"></a>
                 <h2>Search results</h2>
                 <div class="search-results-include-grid"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="result-list" id="result-list"></div>
             </div>
         </div>
     </div>

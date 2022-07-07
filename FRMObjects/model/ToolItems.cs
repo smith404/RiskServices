@@ -1,72 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FRMObjects.model
 {
-    public class FRMContext : DbContext
-    {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public DbSet<ToolDefinition> ToolDefinitions { get; set; }
-
-        public DbSet<ToolStep> ToolSteps { get; set; }
-
-        public DbSet<ToolExecutionLog> ToolExecutionLogs { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(ConnectionBuilder.GetSQLConnectionString(), builder =>
-            {
-                builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-            });
-            base.OnConfiguring(optionsBuilder);            
-        }
-    }
-
-    [Table("SearchableItem", Schema = "dbo")]
-    public class SearchableItem
-    {
-        public SearchableItem()
-        {
-            this.Title = "";
-            this.KeyWords = "";
-            this.Summary = "";
-            this.TargetType = "";
-            this.Target = "";
-        }
-
-        [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [JsonProperty(PropertyName = "id")]
-        public long Id { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        [JsonProperty(PropertyName = "title")]
-        public string Title { get; set; }
-
-        [Required]
-        [JsonProperty(PropertyName = "key_words")]
-        public string KeyWords { get; set; }
-
-        [Required]
-        [StringLength(90)]
-        [JsonProperty(PropertyName = "summary")]
-        public string Summary { get; set; }
-
-        [Required]
-        [StringLength(90)]
-        [JsonProperty(PropertyName = "target_type")]
-        public string TargetType { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        [JsonProperty(PropertyName = "target")]
-        public string Target { get; set; }
-    }
-
     [Table("ToolDefinition", Schema = "dbo")]
     public class ToolDefinition
     {
@@ -114,7 +51,6 @@ namespace FRMObjects.model
         public ToolExecutionLog()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            this.GUID = Guid.NewGuid().ToString();
             this.RunConfiguration = "";
             this.Persist = true;
             this.ExitOnFail = true;
@@ -140,12 +76,11 @@ namespace FRMObjects.model
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [JsonProperty(PropertyName = "requestor")]
-        public string Requestor { get; set; }
+        public string? Requestor { get; set; }
 
-        [Required]
-        [StringLength(36)]
-        [JsonProperty(PropertyName = "guid")]
-        public string GUID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [JsonProperty(PropertyName = "requestor")]
+        public Guid? GUID { get; set; }
 
         [Required]
         [JsonProperty(PropertyName = "persist")]

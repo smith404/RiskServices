@@ -63,7 +63,7 @@ CREATE TABLE [dbo].[ToolExecutionLog] (
     [ToolDefinitionId]   BIGINT         NOT NULL,
     [Requestor]          AS             (original_login()),
     [RunConfiguration]   NVARCHAR (MAX) NOT NULL,
-    [GUID]               CHAR (36)      NOT NULL,
+    [GUID]               AS             (newid()),
     [Persist]            BIT            NOT NULL,
     [ExitOnFail]         BIT            NOT NULL,
     [Status]             CHAR (1)       NOT NULL,
@@ -75,8 +75,6 @@ CREATE TABLE [dbo].[ToolExecutionLog] (
     CONSTRAINT [FK_ToolExecutionLog_ToolDefinition] FOREIGN KEY ([ToolDefinitionId]) REFERENCES [dbo].[ToolDefinition] ([Id])
 );
 
-
-GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ToolExecutionLog_GUID]
     ON [dbo].[ToolExecutionLog]([GUID] ASC);
 
@@ -90,4 +88,15 @@ CREATE TABLE [dbo].[ToolStepConfig] (
     CONSTRAINT [FK_ToolStepConfig_ToolStep] FOREIGN KEY ([ToolStepId]) REFERENCES [dbo].[ToolStep] ([Id])
 );
 
-
+CREATE TABLE [dbo].[Notifications] (
+    [Id]          BIGINT         IDENTITY (1, 1) NOT NULL,
+    [Owner]       NVARCHAR (255) NOT NULL,
+    [Sender]      NVARCHAR (255) NOT NULL,
+    [Message]     NVARCHAR (255) NOT NULL,
+    [URL]         NVARCHAR (255) NOT NULL,
+    [Type]        NVARCHAR (10)  NOT NULL,
+    [Processed]   BIT            NOT NULL,
+    [CreatedOn]   DATETIME       NOT NULL,
+    [ProcessedOn] DATETIME       NULL,
+    CONSTRAINT [PK_Notifications] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
