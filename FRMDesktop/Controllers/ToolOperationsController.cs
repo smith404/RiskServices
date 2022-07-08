@@ -30,18 +30,7 @@ namespace FRMDesktop.Controllers
 
             if (id == -1)
             {
-                step = new ToolStep
-                {
-                    Description = "New Step",
-                    StepType = "TBD",
-                    Definition = "New Step",
-                    HasOutput = true,
-                    TestObject = "",
-                    DatasetName = "dataset",
-                    Message = "New Step",
-                    Format = "TDB",
-                    Active = true,
-                };
+                step = new();
             }
             else
             {

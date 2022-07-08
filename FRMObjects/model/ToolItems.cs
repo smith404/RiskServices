@@ -114,13 +114,13 @@ namespace FRMObjects.model
     {
         public ToolStep()
         {
-            this.Description = "";
-            this.StepType = "";
-            this.Definition = "";
-            this.TestObject = "";
-            this.DatasetName = "";
-            this.Message = "";
-            this.Format = "";
+            this.Description = "Describe the process";
+            this.StepType = "pyt";
+            this.Definition = "print('Hello World')";
+            this.TestObject = "{}";
+            this.DatasetName = "TDB";
+            this.Message = "New process";
+            this.Format = "txt";
             this.Active = true;
         }
 
