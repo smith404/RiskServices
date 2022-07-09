@@ -31,6 +31,8 @@ namespace FRMDesktop.Controllers
             if (id == -1)
             {
                 step = new();
+                string? userName = HttpContext.User.Identity?.Name;
+                step.Description = (userName != null) ? userName : "Unknown User";
             }
             else
             {
