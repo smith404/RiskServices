@@ -1,12 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Queues;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FRMObjects
 {
@@ -26,7 +20,7 @@ namespace FRMObjects
 
                 return serviceClient;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -89,7 +83,7 @@ namespace FRMObjects
                 string localPath = Path.GetTempPath();
                 string localFileName = guid + "_" + filename;
                 string localFilePath = Path.Combine(localPath, localFileName);
-                
+
                 BlobClient blobClient = containerClient.GetBlobClient(guid + "/" + filename);
 
                 // Write text to the file

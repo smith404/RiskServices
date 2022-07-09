@@ -1,32 +1,30 @@
 ﻿@page
+@using System.Security.Principal
 @model IndexModel
 @{
     ViewData["Title"] = "FRM Hub";
 }
 <script type="text/javascript" src="~/js/flexsearch.min.js"></script>
+<script>
+    const search = {};
 
-<div ng-app="frmHubApp">
-    <script type="text/javascript">
-        const app = angular.module("frmHubApp", ['ngSanitize']);
-        const search = {};
+    search.init = search.init = source => {
+        search.source = source;
+        $.ajax({
+            url: source
+        }).then(function (response) {
+            search.pages = response;
+            search.index = new FlexSearch({ doc: { id: 'target', field: ['title', 'keywords'] } })
+            search.index.add(response);
+        }, function (response) {
+            console.log(response);
+        });
+    };
 
-        search.init = search.init = source => {
-            search.source = source;
-            $.ajax({
-                url: source
-            }).then(function (response) {
-                search.pages = response;
-                search.index = new FlexSearch({ doc: { id: 'target', field: ['title', 'keyWords'] } })
-                search.index.add(response);    
-            }, function(response) {
-                console.log(response);
-            });
-        };
-
-        search.perfromLocalSearch = keywords => {
-            const results = search.index.search(keywords.trim()).slice(0,9);
-            document.querySelector('.search-results-include').classList.toggle('is-hidden', results.length === 0);
-            const render = d => `
+    search.perfromLocalSearch = keywords => {
+        const results = search.index.search(keywords.trim()).slice(0, 9);
+        document.querySelector('.search-results-include').classList.toggle('is-hidden', results.length === 0);
+        const render = d => `
                 <div class="search-result">
                 <a href="${d.target}">
                 <h3>${d.title}</h3>
@@ -39,59 +37,66 @@
                 </span>
                 </div>
             `;
-            document.querySelector('.search-results-include-grid').innerHTML = results.map(render).join('');
-        };
+        document.querySelector('.search-results-include-grid').innerHTML = results.map(render).join('');
+    };
 
-        search.close = () => {
-            document.querySelector('.frm-search').value = "";
-            document.querySelector('.search-results-include').classList.toggle('is-hidden', true);
+    search.close = () => {
+        document.querySelector('.frm-search').value = "";
+        document.querySelector('.search-results-include').classList.toggle('is-hidden', true);
+    }
+
+    app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        // Keep the notifications up-to-date
+        $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.readNotifications = function() {
+            $http.get($scope.notifictionURL).
+            then(function(response) {
+                $scope.notificationCount = response.data;
+            });
         }
+        $scope.readNotifications();
+        $interval(function () {
+            $scope.readNotifications();
+        }, 20000);
 
-        app.config(function($locationProvider,$interpolateProvider){
-            $locationProvider.html5Mode({
-                    enabled:true
-            });
+        search.init('/api/Home/GetSearchItems?domain=Home');
+
+        $("#search-input").keyup(function(e) {
+            if (e.keyCode == 13) {
+                search.perfromServerSearch(e.target.value);
+            }
+            else {
+                search.perfromLocalSearch(e.target.value)
+            }
         });
-    
-        app.controller("frmHubCtrl", function ($scope, $http) {
-            search.init('/api/SearchItem/GetItems');
-            $("#search-input").keyup(function(e) {
-                if (e.keyCode == 13) {
-                    search.perfromServerSearch(e.target.value);
-                }
-                else {
-                    search.perfromLocalSearch(e.target.value)
-                }
-            });
-        });
-    </script>
-    <div class="container-fluid" ng-controller="frmHubCtrl" role="main">
-        <div class="row" style="padding-top: 100px">
-            <div class="col">
-                <h4>Financial Risk Management Hub</h4>
-                <h6>Search for help or find the tools you need for your task raise a support request</h6>
-            </div>
+    });
+</script>
+<div class="container-fluid" role="main">
+    <div class="row" style="padding-top: 100px">
+        <div class="col">
+            <h4>Financial Risk Management Hub</h4>
+            <h6>Search for help or find the tools you need for your task raise a support request</h6>
         </div>
-        <div class="row">
-            <div class="col">
-                <div class="input-group">
-                    <input id="search-input" class="frm-search"
-                            type="search"
-                            placeholder="Search topics or keywords">
-                    <div class="input-group-append">
-                        <button class="btn btn btn-info" onclick="perfromSearch()">
-                            <i class="fa fa-search"></i> Search
-                        </button>
-                    </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="input-group">
+                <input id="search-input" class="frm-search"
+                        type="search"
+                        placeholder="Search topics or keywords">
+                <div class="input-group-append">
+                    <button class="btn btn btn-info" onclick="perfromSearch()">
+                        <i class="fa fa-search"></i> Search
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="row search-results-include is-hidden">
-            <div class="search-results-include-content">
-                <a class="search-results-include-close-button" href="javascript:search.close()"></a>
-                <h2>Search results</h2>
-                <div class="search-results-include-grid"></div>
-            </div>
+    </div>
+    <div class="row search-results-include is-hidden">
+        <div class="search-results-include-content">
+            <a class="search-results-include-close-button" href="javascript:search.close()"></a>
+            <h2>Search results</h2>
+            <div class="search-results-include-grid"></div>
         </div>
     </div>
 </div>

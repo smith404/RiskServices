@@ -3,248 +3,216 @@
 @{
     ViewData["Title"] = "Tool Step Detail";
 }
+<script>
+    let stepId = @Model.ItemId;
+    let serverRoot = '@Model.ServerRoot';
 
-<div ng-app="frmToolStepDetailApp">
-    <script type="text/javascript">
-        let commandId = @Model.ItemId;
-        let serverRoot = "@Model.ServerRoot";
-
-        function hideAlerts()
-        {
-            $('#success-alert').hide();
-            $('#error-alert').hide();
-        };
-
-        function showSucess()
-        {
-            $('#success-alert').show();
-            setTimeout(function() {
-            $('#success-alert').hide();
-            }, 2000);
-        };
-
-        function showFail()
-        {
-            $('#success-alert').show();
-            setTimeout(function() {
-            $('#error-alert').hide();
-            }, 2000);
-        };
-
-        const app = angular.module("frmToolStepDetailApp", ['ngSanitize']);
-
-        app.config(function($locationProvider,$interpolateProvider){
-            $locationProvider.html5Mode({
-                    enabled:true
-            });
-        });
-    
-        app.controller("frmToolStepDetailCtrl", function ($scope, $http) {
-            $scope.command = { };
-
-            hideAlerts();
-
-            $http.get(serverRoot + 'ToolStepOperations?eid=' + commandId).
+    app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        // Keep the notifications up-to-date
+        $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.readNotifications = function() {
+            $http.get($scope.notifictionURL).
             then(function(response) {
-                $scope.command = response.data;
+                $scope.notificationCount = response.data;
             });
+        }
+        $scope.readNotifications();
+        $interval(function () {
+            $scope.readNotifications();
+        }, 20000);
 
-            $scope.newCommand = function(event)
-            {
-                $http.get(serverRoot + 'ToolStepOperations?eid=-1').
-                then(function(response) {
-                    $scope.command = response.data;
-                });
-            };
+        $scope.step = { };
 
-            $scope.updateCommand = function(event)
-            {
-                let method = "PUT";
+        hideAlerts();
 
-                if ($scope.command.id == 0) {
-                    method = "POST";
-                }
-
-                let request_url = serverRoot + 'ToolStepOperations';
-                let request_object = angular.toJson($scope.command);
-                $http({
-                    method: method,
-                    url: request_url,
-                    data: request_object,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(function successCallback(response)
-                    {
-                        $scope.command = response.data;
-                        _success(response.data);
-                    }, function errorCallback(response)
-                    {
-                        _error(response)
-                    })
-            };
-
-            $scope.execCommand = function(event)
-            {
-                $http.get(serverRoot + 'ToolStepOperations?id=').
-                then(function(response) {
-                    $scope.command.resultOutput = response.data.resultOutput;
-                });
-            };
-
-            function _success(response)
-            {
-                $scope.command = response;
-                showSucess();
-            }
-
-            function _error(response)
-            {
-                showFail();
-                console.log(response);
-            }
+        $http.get('/api/ToolOperations/ToolStep?id=' + stepId).
+        then(function(response) {
+            $scope.step = response.data;
         });
-    </script>
 
-    <div ng-controller="frmToolStepDetailCtrl" role="main" class="container-fluid">
+        $scope.newstep = function(event)
+        {
+            $http.get('/api/ToolOperations/ToolStep?id=-1').
+            then(function(response) {
+                $scope.step = response.data;
+            });
+        };
 
-        <div class="row">
-            <div class="col">
-                <h4>Command Editor</h4>
-            </div>
-        </div>
+        $scope.updatestep = function(event)
+        {
+            let method = "PUT";
 
-        <div class="row">
-            <div class="col-6">
-                <label for="thename">
-                    <i class="fa fa-code fa-fw"></i>
-                    Name
-                </label>
-                <div class="input-group mb-3">
-                    <input id="thename" type="text" class="form-control" ng-model="command.description">
-                </div>
-            </div>
-            <div class="col-6">
-                <label for="commandname">
-                    <i class="fa fa-sitemap fa-fw"></i>
-                    Message
-                </label>
-                <div class="input-group mb-3">
-                    <input id="commandname" type="text" class="form-control" ng-model="command.message">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2">
-                <label for="description">
-                    <i class="fa fa-pencil-alt fa-fw"></i>
-                    Type of Command
-                </label>
-                <div class="input-group mb-3">
-                    <input id="description" type="text" class="form-control" ng-model="command.step_type">
-                </div>
-            </div>
-            <div class="col-4">
-                <label for="prio">
-                    <i class="fa fa-key fa-fw"></i>
-                    Dataset Name
-                </label>
-                <div class="input-group mb-3">
-                    <input id="prio" type="text" class="form-control" ng-model="command.dataset_name">
-                </div>
-            </div>
-            <div class="col-3">
-                <label for="format">
-                    <i class="fa fa-key fa-fw"></i>
-                    Dataset Foramt
-                </label>
-                <div class="input-group mb-3">
-                    <input id="format" type="text" class="form-control" ng-model="command.format">
-                </div>
-            </div>
-            <div class="col">
-                <label for="input">
-                    <i class="fa fa-key fa-fw"></i>
-                    Has Input
-                </label>
-                <div class="form-check form-switch">
-                    <input id="input" class="form-check-input" type="checkbox" ng-model="command.has_input">
-                </div>
-            </div>
-            <div class="col">
-                <label for="output">
-                    <i class="fa fa-key fa-fw"></i>
-                    Has Output
-                </label>
-                <div class="form-check form-switch">
-                    <input id="output" class="form-check-input" type="checkbox" ng-model="command.has_output">
-                </div>
-            </div>
-            <div class="col">
-                <label class="form-check-label" for="in-memory"><i class="fa fa-key fa-fw"></i>In Memory</label>
-                <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" id="in-memory" ng-model="command.in_memory">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="body">
-                    <i class="fa fa-file-code fa-fw"></i>
-                    Step Defintion
-                </label>
-                <div class="input-group mb-3">
-                    <textarea id="body" style="font-family: monospace; overflow: scroll;" class="form-control"
-                              ng-model="command.definition" rows="8" maxlength="4096">
-                    </textarea>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="test-object">
-                    <i class="fa fa-file-code fa-fw"></i>
-                    Test Object
-                </label>
-                <div class="input-group mb-3">
-                    <textarea id="test-object" style="font-family: monospace; overflow: scroll;" class="form-control"
-                              ng-model="command.test_object" rows="4" maxlength="4096">
-                    </textarea>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="output">
-                    <i class="fa fa-terminal fa-fw"></i>
-                    Results
-                </label>
-                <div class="input-group mb-3">
-                    <textarea id="output" class="form-control" ng-model="command.resultOutput" rows="4" readonly>
-                    </textarea>
-                </div>
-            </div>
-        </div>
-        <div class="form-check">
-            <div class="col">
-                <button id="saveButton" ng-click="updateCommand($event)" class="btn btn-info">
-                    Save
-                </button>
-                <button id="executeButton" ng-click="execCommand($event)" class="btn btn-info">
-                    Execute
-                </button>
-                <button id="newButton" ng-click="newCommand($event)" class="btn btn-info">
-                    New
-                </button>
-            </div>
+            if ($scope.step.id == 0) {
+                method = "POST";
+            }
+
+            let request_object = angular.toJson($scope.step);
+            $http({
+                method: method,
+                url: '/api/ToolOperations/ToolStep',
+                data: request_object,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response)
+                {
+                    $scope.step = response.data;
+                    _success(response.data);
+                }, function errorCallback(response)
+                {
+                    _error(response)
+                })
+        };
+
+        $scope.execstep = function(event)
+        {
+            $http.get(serverRoot + 'ToolStepOperations?id=').
+            then(function(response) {
+                $scope.step.resultOutput = response.data.resultOutput;
+            });
+        };
+    });
+</script>
+<div role="main" class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h4>Step Editor</h4>
         </div>
     </div>
 
-    <div class="alert alert-success" id="success-alert">
-        <strong>Success!</strong> Command is updated.
+    <div class="row">
+        <div class="col-6">
+            <label for="thename">
+                <i class="fa fa-code fa-fw"></i>
+                Name
+            </label>
+            <div class="input-group mb-3">
+                <input id="thename" type="text" class="form-control" ng-model="step.description">
+            </div>
+        </div>
+        <div class="col-6">
+            <label for="stepname">
+                <i class="fa fa-sitemap fa-fw"></i>
+                Message
+            </label>
+            <div class="input-group mb-3">
+                <input id="stepname" type="text" class="form-control" ng-model="step.message">
+            </div>
+        </div>
     </div>
-    <div class="alert alert-warning" id="error-alert">
-        <strong>Warning!</strong> Changes were not saved.
+    <div class="row">
+        <div class="col-2">
+            <label for="description">
+                <i class="fa fa-pencil-alt fa-fw"></i>
+                Type
+            </label>
+            <div class="input-group mb-3">
+                <input id="description" type="text" class="form-control" ng-model="step.stepType">
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="prio">
+                <i class="fa fa-key fa-fw"></i>
+                Dataset Name
+            </label>
+            <div class="input-group mb-3">
+                <input id="prio" type="text" class="form-control" ng-model="step.datasetName">
+            </div>
+        </div>
+        <div class="col-3">
+            <label for="format">
+                <i class="fa fa-key fa-fw"></i>
+                Dataset Foramt
+            </label>
+            <div class="input-group mb-3">
+                <input id="format" type="text" class="form-control" ng-model="step.format">
+            </div>
+        </div>
+        <div class="col">
+            <label for="input">
+                <i class="fa fa-key fa-fw"></i>
+                Has Input
+            </label>
+            <div class="form-check form-switch">
+                <input id="input" class="form-check-input" type="checkbox" ng-model="step.hasInput">
+            </div>
+        </div>
+        <div class="col">
+            <label for="output">
+                <i class="fa fa-key fa-fw"></i>
+                Has Output
+            </label>
+            <div class="form-check form-switch">
+                <input id="output" class="form-check-input" type="checkbox" ng-model="step.hasOutput">
+            </div>
+        </div>
+        <div class="col">
+            <label class="form-check-label" for="in-memory"><i class="fa fa-key fa-fw"></i>In Memory</label>
+            <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="in-memory" ng-model="step.inMemory">
+            </div>
+        </div>
     </div>
-
+    <div class="row">
+        <div class="col">
+            <label for="body">
+                <i class="fa fa-file-code fa-fw"></i>
+                Step Defintion
+            </label>
+            <div class="input-group mb-3">
+                <textarea id="body" style="font-family: monospace; overflow: scroll;" class="form-control"
+                            ng-model="step.definition" rows="8" maxlength="4096">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="test-object">
+                <i class="fa fa-file-code fa-fw"></i>
+                Test Object
+            </label>
+            <div class="input-group mb-3">
+                <textarea id="test-object" style="font-family: monospace; overflow: scroll;" class="form-control"
+                            ng-model="step.testObject" rows="4" maxlength="4096">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="output">
+                <i class="fa fa-terminal fa-fw"></i>
+                Results
+            </label>
+            <div class="input-group mb-3">
+                <textarea id="output" class="form-control" ng-model="step.resultOutput" rows="4" readonly>
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button id="saveButton" ng-click="updatestep($event)" class="btn btn-info">
+                Save
+            </button>
+            <button id="executeButton" ng-click="execstep($event)" class="btn btn-info">
+                Execute
+            </button>
+            <button id="newButton" ng-click="newstep($event)" class="btn btn-info">
+                New
+            </button>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 10px">
+        <div class="col">
+            <div class="alert alert-success" id="success-alert">
+                <strong>Success!</strong> step is updated.
+            </div>
+            <div class="alert alert-warning" id="error-alert">
+                <strong>Warning!</strong> Changes were not saved.
+            </div>
+        </div>
+    </div>
 </div>
+

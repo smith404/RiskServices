@@ -1,0 +1,75 @@
+﻿@page
+@model FRMDesktop.Pages.PageEditorModel
+@{
+    ViewData["Title"] = "Tool Step Detail";
+}
+<script>
+    let pageId = @Model.PageId;
+
+    app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        // Keep the notifications up-to-date
+        $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.readNotifications = function() {
+            $http.get($scope.notifictionURL).
+            then(function(response) {
+                $scope.notificationCount = response.data;
+            });
+        }
+        $scope.readNotifications();
+        $interval(function () {
+            $scope.readNotifications();
+        }, 20000);
+
+        $scope.page = {};
+        $scope.sections = [];
+
+        hideAlerts();
+
+        $http.get('/api/Page/GetPage?id=' + pageId).
+        then(function(response) {
+            $scope.page = response.data;
+            $http.get('/api/Page/GetPageSections?id=' + pageId).
+            then(function(response) {
+                $scope.sections = response.data;
+            });
+        });
+    });
+</script>
+<div role="main" class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h4>Page Editor</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label for="thename">
+                <i class="fa fa-code fa-fw"></i>
+                Name
+            </label>
+            <div class="input-group mb-3">
+                <input id="thename" type="text" class="form-control" ng-model="page.title">
+            </div>
+        </div>
+        <div class="col-6">
+            <label for="stepname">
+                <i class="fa fa-sitemap fa-fw"></i>
+                Message
+            </label>
+            <div class="input-group mb-3">
+                <input id="stepname" type="text" class="form-control" ng-model="page.headline">
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 10px">
+        <div class="col">
+            <div class="alert alert-success" id="success-alert">
+                <strong>Success!</strong> step is updated.
+            </div>
+            <div class="alert alert-warning" id="error-alert">
+                <strong>Warning!</strong> Changes were not saved.
+            </div>
+        </div>
+    </div>
+</div>
+

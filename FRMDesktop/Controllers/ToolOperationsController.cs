@@ -36,7 +36,7 @@ namespace FRMDesktop.Controllers
             }
             else
             {
-                using (FRMContext context = new())
+                using (FRP_LandingContext context = new())
                 {
                     step = context.ToolSteps.Find(id);
                 }
@@ -48,7 +48,7 @@ namespace FRMDesktop.Controllers
         [HttpPut("ToolStep")]
         public ToolStep PutStep(ToolStep step)
         {
-            using (FRMContext context = new())
+            using (FRP_LandingContext context = new())
             {
                 context.ToolSteps.Update(step);
                 int count = context.SaveChanges();
@@ -60,7 +60,7 @@ namespace FRMDesktop.Controllers
         [HttpPost("ToolStep")]
         public ToolStep PostStep(ToolStep step)
         {
-            using (FRMContext context = new())
+            using (FRP_LandingContext context = new())
             {
                 context.ToolSteps.Add(step);
                 int count = context.SaveChanges();
@@ -72,7 +72,7 @@ namespace FRMDesktop.Controllers
         [HttpDelete("ToolStep")]
         public ToolStep DeleteStep(ToolStep step)
         {
-            using (FRMContext context = new())
+            using (FRP_LandingContext context = new())
             {
                 context.ToolSteps.Remove(step);
                 int count = context.SaveChanges();
@@ -86,7 +86,7 @@ namespace FRMDesktop.Controllers
         {
             ToolExecutionLog? item;
 
-            using (FRMContext context = new())
+            using (FRP_LandingContext context = new())
             {
                 item = context.ToolExecutionLogs.Find(id);
             }
@@ -97,7 +97,7 @@ namespace FRMDesktop.Controllers
         [HttpPost("ToolExecution")]
         public ToolExecutionLog PostQueueExecution(ToolExecutionLog item)
         {
-            using (FRMContext context = new())
+            using (FRP_LandingContext context = new())
             {
                 context.ToolExecutionLogs.Add(item);
                 int count = context.SaveChanges();
@@ -112,7 +112,7 @@ namespace FRMDesktop.Controllers
                     {
                         BlobContainerClient containerClient = StorageAccountHelper.GetBlobContainerClient(blobServiceClient, container);
 #pragma warning disable CS8604 // Possible null reference argument.
-                        StorageAccountHelper.WriteContentToBlob(containerClient, item.GUID.ToString(), "request.json", item.RunConfiguration);
+                        StorageAccountHelper.WriteContentToBlob(containerClient, item.Guid.ToString(), "request.json", item.RunConfiguration);
 #pragma warning restore CS8604 // Possible null reference argument.
                     }
 
@@ -123,7 +123,7 @@ namespace FRMDesktop.Controllers
                     {
                         QueueClient queueClient = StorageAccountHelper.GetQueueClient(queueServiceClient, queue);
 #pragma warning disable CS8604 // Possible null reference argument.
-                        queueClient.SendMessage(Base64Encode(item.GUID.ToString()));
+                        queueClient.SendMessage(Base64Encode(item.Guid.ToString()));
 #pragma warning restore CS8604 // Possible null reference argument.
                     }
                 }

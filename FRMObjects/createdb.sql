@@ -23,13 +23,13 @@ CREATE TABLE [dbo].[HubPageSection] (
     CONSTRAINT [FK_HubPageSection_HubPage] FOREIGN KEY ([HubPageId]) REFERENCES [dbo].[HubPage] ([Id])
 );
 
-CREATE TABLE [dbo].[SearchableItem] (
+CREATE TABLE [dbo].[SearchItem] (
     [Id]         BIGINT         IDENTITY (1000, 1) NOT NULL,
     [Title]      NVARCHAR (50)  NOT NULL,
     [Keywords]   NVARCHAR (MAX) NOT NULL,
     [Summary]    NVARCHAR (90)  NOT NULL,
     [TargetType] NVARCHAR (12)  NOT NULL,
-    [Taget]      NVARCHAR (255) NOT NULL
+    [Target]      NVARCHAR (255) NOT NULL
 );
 
 CREATE TABLE [dbo].[ToolDefinition] (
@@ -90,11 +90,12 @@ CREATE TABLE [dbo].[ToolStepConfig] (
 
 CREATE TABLE [dbo].[Notifications] (
     [Id]          BIGINT         IDENTITY (1, 1) NOT NULL,
-    [Owner]       NVARCHAR (255) NOT NULL,
-    [Sender]      NVARCHAR (255) NOT NULL,
+    [Type]        NVARCHAR (50)  NOT NULL,
+    [Icon]        NVARCHAR (50)  NOT NULL,
     [Message]     NVARCHAR (255) NOT NULL,
     [URL]         NVARCHAR (255) NOT NULL,
-    [Type]        NVARCHAR (10)  NOT NULL,
+    [Owner]       NVARCHAR (255) NOT NULL,
+    [Sender]      NVARCHAR (255) NOT NULL,
     [Processed]   BIT            NOT NULL,
     [CreatedOn]   DATETIME       NOT NULL,
     [ProcessedOn] DATETIME       NULL,

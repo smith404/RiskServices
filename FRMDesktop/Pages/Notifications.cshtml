@@ -1,0 +1,56 @@
+﻿@page
+@model FRMDesktop.Pages.NotificationsModel
+@{
+    ViewData["Title"] = "My Notifications";
+}
+<script>
+    app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        // Keep the notifications up-to-date
+        $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.readNotifications = function() {
+            $http.get($scope.notifictionURL).
+            then(function(response) {
+                $scope.notificationCount = response.data;
+            });
+        }
+        $scope.readNotifications();
+        $interval(function () {
+            $scope.readNotifications();
+        }, 20000);
+
+        $scope.notifications = [];
+
+        $http.get('/api/Home/GetNotifiations?user=' + document.getElementById('current-user').innerHTML).
+        then(function(response) {
+            $scope.notifications = response.data;
+        });
+
+        $scope.processNotification = function(id)
+        {
+        };
+    });
+</script>
+<div role="main" class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h4>My Notifications</h4>
+        </div>
+    </div>
+
+    <div class="row" ng-repeat="notification in notifications ">
+        <div class="col" ng-class="notification.type">
+            <div class="container">
+                <div class="alert-icon">
+                    <i class="fa" ng-class="notification.icon"></i>
+                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                        ng-click="processNotification(notification.id">
+                    <span aria-hidden="true"><i class="fa fa-check-square"></i></span>
+                </button>
+                <span ng-bind-html="notification.message">the message</span>
+                <br>
+                <a ng-if="notification.url != ''" ng-href="{{notification.url}}">Click here to follow</a>
+            </div>
+        </div>
+    </div>
+</div>

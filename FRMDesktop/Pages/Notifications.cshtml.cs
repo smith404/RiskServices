@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FRMDesktop.Pages.Shared
+namespace FRMDesktop.Pages
 {
-    public class _LoginPartialModel : PageModel
+    public class NotificationsModel : PageModel
     {
         public void OnGet()
         {
