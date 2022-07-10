@@ -261,3 +261,222 @@ body {
 .label-Dec {
     background-color: #F1DCA4;
 }
+
+.frm-contents-layout {
+    padding: 32px 0 32px 32px;
+    max-width: 1320px;
+    box-sizing: border-box;
+}
+
+.frm-contents-layout-header {
+    border-bottom: solid 1px rgb(241, 241, 241);
+}
+
+.frm-contents-layout-header-text {
+    box-sizing: border-box;
+    display: block;
+    background-color: white;
+    width: 320px;
+    height: 176px;
+    padding: 32px;
+    font-size: 0.9rem;
+}
+
+.frm-contents-layout-header-text hi {
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+.frm-contents-layout-header-image {
+    float: right;
+    display: block;
+    overflow: hidden;
+    background-color: rgb(204, 204, 204);
+    width: 960px;
+    height: 176px;
+}
+
+.frm-contents-layout-header-image > img {
+    width: 960px;
+    margin-top: -96px;
+}
+
+.frm-contents-layout-sidebar {
+    float: right;
+    box-sizing: border-box;
+    width: 340px;
+    margin: 0;
+    padding: 16px 16px 16px 16px;
+}
+
+.frm-contents-layout-sidebar h2 {
+    font-size: 0.9rem;
+    color: rgb(100, 100, 100);
+    padding: 0 0 10px 0;
+    margin: 6px 0 0 0;
+    border-bottom: solid 1px rgb(204, 204, 204);
+}
+
+.frm-contents-layout-sidebar ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.frm-contents-layout-sidebar > ul > li {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.frm-contents-layout-sidebar > ul > li > ul > li {
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+
+.frm-contents-layout-sidebar ul > li > ul {
+    padding: 0 22px;
+}
+
+.frm-contents-layout-sidebar li a {
+    display: block;
+    padding: 8px 0;
+    color: rgb(28, 28, 28);
+}
+
+.frm-contents-layout-sidebar li a:hover {
+    background-color: rgb(241, 241, 241);
+}
+
+.frm-contents-layout-sidebar li > ul > li > a {
+    color: rgb(68, 68, 68);
+    padding: 8px 6px;
+}
+
+.frm-contents-layout-sidebar img {
+    width: 16px;
+    height: 16px;
+    margin: 4px;
+}
+
+.frm-contents-layout-sidebar-panel {
+    padding-bottom: 8px;
+}
+
+.frm-contents-layout-latest-updates {
+    box-sizing: border-box;
+    width: 310px;
+    padding: 12px;
+}
+
+.frm-contents-layout-latest-updates time {
+    font-size: 0.7rem;
+    display: block;
+}
+
+.frm-contents-layout-latest-updates ul {
+    list-style: none;
+    padding: 0;
+}
+
+.frm-contents-layout-latest-updates a {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.frm-contents-layout-header-text h1 {
+    display: inline-block;
+    font-family: FrutigerLight;
+    font-weight: normal;
+    line-height: 24px;
+    margin-left: 24px;
+    margin-top: 6px;
+    vertical-align: top;
+}
+
+.frm-contents-layout-filter {
+    position: relative;
+    max-width: 960px;
+    margin-left: 320px;
+    padding: 24px 0;
+}
+
+.frm-contents-layout-filter input {
+    width: 100%;
+    height: 48px;
+    padding: 8px 12px 3px 40px;
+    border: solid 1px rgb(204, 204, 204);
+}
+
+.frm-contents-layout-filter img {
+    position: absolute;
+    top: 40px;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+}
+
+.frm-contents-layout-content {
+    max-width: 1320px;
+}
+
+.frm-contents-layout-tile-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.frm-contents-layout-tile-image-container {
+    display: block;
+    height: 146px;
+    overflow: hidden;
+}
+
+.frm-contents-layout-tile-list > li {
+    display: inline-block;
+    overflow: hidden;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(204, 204, 204);
+    background-color: white;
+    width: 300px;
+    height: 210px;
+    margin: 0 12px 12px 0;
+}
+
+.frm-contents-layout-tile-list > .summary {
+    display: inline-block;
+    overflow: hidden;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(204, 204, 204);
+    background-color: white;
+    width: 300px;
+    height: 300px;
+    margin: 0 12px 12px 0;
+}
+
+.frm-contents-layout-tile-list > li > a {
+    display: block;
+    padding: 12px;
+    height: 100%;
+    color: rgb(28, 28, 28);
+}
+
+.frm-contents-layout-tile-list > li > a:hover {
+    background-color: rgb(241, 241, 241);
+}
+
+.frm-contents-layout-tile-list > li img {
+    width: 100%;
+}
+
+.frm-contents-layout-tile-list > li h3 {
+    font-size: 1rem;
+    color: rgb(100, 100, 100);
+    margin: 12px 0 8px 0;
+}
+
+.frm-contents-layout-tile-list > li p {
+    font-size: 0.9em;
+    margin: 0 0 8px 0;
+}

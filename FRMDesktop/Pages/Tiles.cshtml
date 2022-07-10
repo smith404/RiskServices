@@ -6,7 +6,7 @@
     ViewData["Title"] = "Tool Step Detail";
 }
 <script>
-    let pageId = @Model.PageId;
+    let pageId = '@Model.PageId';
 
     app.controller("frmHubCtrl", function ($scope, $http, $interval) {
         // Keep the notifications up-to-date
@@ -25,167 +25,32 @@
         $scope.page = {};
         $scope.sections = [];
 
-        hideAlerts();
-
-        $http.get('/api/Page/Page?id=' + pageId).
+        $http.get('/api/Page/Page?guid=' + pageId).
         then(function(response) {
             $scope.page = response.data;
-            $http.get('/api/Page/PageSections?id=' + pageId).
+            $http.get('/api/Page/PageSections?id=' + $scope.page.id).
             then(function(response) {
                 $scope.sections = response.data;
             });
         });
-
-        $scope.new = function(event)
-        {
-            $http.get('/api/Page/Page?id=-1').
-            then(function(response) {
-                $scope.page = response.data;
-                $scope.sections = [];
-            });
-        };
-
-        $scope.newSection = function(event)
-        {
-            $http.get('/api/Page/NewSection?id=' + pageId).
-            then(function(response) {
-                $scope.sections.push(response.data);
-            });
-        };
-
-        $scope.update = function(event)
-        {
-            let method = "PUT";
-
-            if ($scope.page.id == 0) {
-                method = "POST";
-            }
-
-            let request_object = angular.toJson($scope.page);
-            $http({
-                method: method,
-                url: '/api/Page/Page',
-                data: request_object,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(function successCallback(response)
-                {
-                    $scope.page = response.data;
-                    $scope.sections.forEach(function(section) {
-                        $scope.updateSection(section);
-                    });
-                    _success(response.data);
-                }, function errorCallback(response)
-                {
-                    _error(response)
-                })
-        };
-
-        $scope.updateSection = function(section)
-        {
-            let method = "PUT";
-            
-            section.hubPageId = $scope.page.id;
-
-            if (section.id == 0) {
-                method = "POST";
-            }
-
-            let request_object = angular.toJson(section);
-            $http({
-                method: method,
-                url: '/api/Page/PageSection',
-                data: request_object,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(function successCallback(response)
-                {
-                    section = response.data;
-                }, function errorCallback(response)
-                {
-                    _error(response)
-                })
-        };
-
     });
 </script>
-<div role="main" class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <h4>Page Editor</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <label for="thename">
-                <i class="fa fa-code fa-fw"></i>
-                Name
-            </label>
-            <div class="input-group mb-3">
-                <input id="thename" type="text" class="form-control" ng-model="page.title">
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="stepname">
-                <i class="fa fa-sitemap fa-fw"></i>
-                Message
-            </label>
-            <div class="input-group mb-3">
-                <input id="stepname" type="text" class="form-control" ng-model="page.headline">
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <h5>Sections</h5>
-        </div>
-    </div>
-    <div ng-repeat="section in sections" class="row">
-        <hr />
-        <div class="col-6">
-            <label for="thename">
-                <i class="fa fa-code fa-fw"></i>
-                Name
-            </label>
-            <div class="input-group mb-3">
-                <input id="thename" type="text" class="form-control" ng-model="section.title">
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="stepname">
-                <i class="fa fa-sitemap fa-fw"></i>
-                Message
-            </label>
-            <div class="input-group mb-3">
-                <input id="stepname" type="text" class="form-control" ng-model="section.headline">
-            </div>
-        </div>
-    </div>
-    <hr />
-    <div class="row">
-        <div class="col">
-            <button id="saveButton" ng-click="update($event)" class="btn btn-info">
-                Save
-            </button>
-            <button id="newButton" ng-click="newSection($event)" class="btn btn-info">
-                New Section
-            </button>
-            <button id="newButton" ng-click="new($event)" class="btn btn-info">
-                New Page
-            </button>
-        </div>
-    </div>
-    <div class="row" style="padding-top: 10px">
-        <div class="col">
-            <div class="alert alert-success" id="success-alert">
-                <strong>Success!</strong> step is updated.
-            </div>
-            <div class="alert alert-warning" id="error-alert">
-                <strong>Warning!</strong> Changes were not saved.
-            </div>
-        </div>
+<div class="frm-contents-layout">
+    <h1>{{page.title}}</h1>
+    <h4>{{page.summary}}</h4>
+    <div class="frm-contents-layout-content">
+        <ul class="frm-contents-layout-tile-list">
+            <li class="summary" ng-repeat="sec in sections">
+                <a href="#" ng-attr-target="{{(sec.newtab) ? '_blank' : undefined}}">
+                    <div class="frm-contents-layout-tile-image-container">
+                        <img ng-src="{{sec.image}}" alt="">
+                    </div>
+                    <h3 ng-bind-html="sec.title"></h3>
+                    <p ng-bind-html="sec.summary"></p>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
+
 

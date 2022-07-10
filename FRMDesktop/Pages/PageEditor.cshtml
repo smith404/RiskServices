@@ -116,22 +116,70 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-6">
-            <label for="thename">
+        <div class="col">
+            <label for="page-title">
                 <i class="fa fa-code fa-fw"></i>
-                Name
+                Page Title
             </label>
             <div class="input-group mb-3">
-                <input id="thename" type="text" class="form-control" ng-model="page.title">
+                <input id="page-title" type="text" class="form-control" ng-model="page.title">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="page-headline">
+                <i class="fa fa-sitemap fa-fw"></i>
+                Headline
+            </label>
+            <div class="input-group mb-3">
+                <input id="page-headline" type="text" class="form-control" ng-model="page.headline">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label for="page-image">
+                <i class="fa fa-code fa-fw"></i>
+                Image
+            </label>
+            <div class="input-group mb-3">
+                <input id="page-image" type="text" class="form-control" ng-model="page.image">
             </div>
         </div>
         <div class="col-6">
-            <label for="stepname">
+            <label for="page-url">
                 <i class="fa fa-sitemap fa-fw"></i>
-                Message
+                URL
             </label>
             <div class="input-group mb-3">
-                <input id="stepname" type="text" class="form-control" ng-model="page.headline">
+                <input id="page-url" type="text" class="form-control" ng-model="page.url">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="page-summary">
+                <i class="fa fa-sitemap fa-fw"></i>
+                Summary
+            </label>
+            <div class="input-group mb-3">
+                <textarea id="page-summary" style="overflow: scroll;" class="form-control"
+                            ng-model="page.summary" rows="2" maxlength="2047">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="page-summary">
+                <i class="fa fa-sitemap fa-fw"></i>
+                Body
+            </label>
+            <div class="input-group mb-3">
+                <textarea id="page-summary" style="overflow: scroll;" class="form-control"
+                            ng-model="page.body" rows="4" maxlength="4096">
+                </textarea>
             </div>
         </div>
     </div>
@@ -140,28 +188,78 @@
             <h5>Sections</h5>
         </div>
     </div>
-    <div ng-repeat="section in sections" class="row">
-        <hr />
-        <div class="col-6">
-            <label for="thename">
-                <i class="fa fa-code fa-fw"></i>
-                Name
-            </label>
-            <div class="input-group mb-3">
-                <input id="thename" type="text" class="form-control" ng-model="section.title">
-            </div>
-        </div>
-        <div class="col-6">
-            <label for="stepname">
-                <i class="fa fa-sitemap fa-fw"></i>
-                Message
-            </label>
-            <div class="input-group mb-3">
-                <input id="stepname" type="text" class="form-control" ng-model="section.headline">
-            </div>
-        </div>
-    </div>
     <hr />
+    <div ng-repeat="section in sections">
+        <div class="row">
+            <div class="col">
+                <label for="page-title">
+                    <i class="fa fa-code fa-fw"></i>
+                    Section Title
+                </label>
+                <div class="input-group mb-3">
+                    <input id="page-title" type="text" class="form-control" ng-model="section.title">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="page-headline">
+                    <i class="fa fa-sitemap fa-fw"></i>
+                    Section Headline
+                </label>
+                <div class="input-group mb-3">
+                    <input id="page-headline" type="text" class="form-control" ng-model="section.headline">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <label for="page-image">
+                    <i class="fa fa-code fa-fw"></i>
+                    Section Image
+                </label>
+                <div class="input-group mb-3">
+                    <input id="page-image" type="text" class="form-control" ng-model="section.image">
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="page-url">
+                    <i class="fa fa-sitemap fa-fw"></i>
+                    Section URL
+                </label>
+                <div class="input-group mb-3">
+                    <input id="page-url" type="text" class="form-control" ng-model="section.url">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="page-summary">
+                    <i class="fa fa-sitemap fa-fw"></i>
+                    Section Summary
+                </label>
+                <div class="input-group mb-3">
+                    <textarea id="page-summary" style="overflow: scroll;" class="form-control"
+                                ng-model="section.summary" rows="2" maxlength="2047">
+                    </textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="page-summary">
+                    <i class="fa fa-sitemap fa-fw"></i>
+                    Section Body
+                </label>
+                <div class="input-group mb-3">
+                    <textarea id="page-summary" style="overflow: scroll;" class="form-control"
+                                ng-model="section.body" rows="4" maxlength="4096">
+                    </textarea>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
     <div class="row">
         <div class="col">
             <button id="saveButton" ng-click="update($event)" class="btn btn-info">
