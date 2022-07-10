@@ -1,10 +1,12 @@
 ﻿@page
-@model FRMDesktop.Pages.PageEditorModel
+@model FRMDesktop.Pages.TilesModel
+@{
+}
 @{
     ViewData["Title"] = "Tool Step Detail";
 }
 <script>
-    let pageId = '@Model.PageId';
+    let pageId = @Model.PageId;
 
     app.controller("frmHubCtrl", function ($scope, $http, $interval) {
         // Keep the notifications up-to-date
@@ -25,10 +27,10 @@
 
         hideAlerts();
 
-        $http.get('/api/Page/Page?guid=' + pageId).
+        $http.get('/api/Page/Page?id=' + pageId).
         then(function(response) {
             $scope.page = response.data;
-            $http.get('/api/Page/PageSections?id=' + $scope.page.id).
+            $http.get('/api/Page/PageSections?id=' + pageId).
             then(function(response) {
                 $scope.sections = response.data;
             });
@@ -36,7 +38,7 @@
 
         $scope.new = function(event)
         {
-            $http.get('/api/Page/Page?guid=new').
+            $http.get('/api/Page/Page?id=-1').
             then(function(response) {
                 $scope.page = response.data;
                 $scope.sections = [];
@@ -45,7 +47,7 @@
 
         $scope.newSection = function(event)
         {
-            $http.get('/api/Page/NewSection?id=' + $scope.page.id).
+            $http.get('/api/Page/NewSection?id=' + pageId).
             then(function(response) {
                 $scope.sections.push(response.data);
             });

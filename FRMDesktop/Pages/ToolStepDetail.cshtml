@@ -30,7 +30,7 @@
             $scope.step = response.data;
         });
 
-        $scope.newstep = function(event)
+        $scope.new = function(event)
         {
             $http.get('/api/ToolOperations/ToolStep?id=-1').
             then(function(response) {
@@ -38,7 +38,7 @@
             });
         };
 
-        $scope.updatestep = function(event)
+        $scope.update = function(event)
         {
             let method = "PUT";
 
@@ -64,7 +64,7 @@
                 })
         };
 
-        $scope.execstep = function(event)
+        $scope.exec = function(event)
         {
             $http.get(serverRoot + 'ToolStepOperations?id=').
             then(function(response) {
@@ -193,13 +193,13 @@
     </div>
     <div class="row">
         <div class="col">
-            <button id="saveButton" ng-click="updatestep($event)" class="btn btn-info">
+            <button id="saveButton" ng-click="update($event)" class="btn btn-info">
                 Save
             </button>
-            <button id="executeButton" ng-click="execstep($event)" class="btn btn-info">
+            <button id="executeButton" ng-click="exec($event)" class="btn btn-info">
                 Execute
             </button>
-            <button id="newButton" ng-click="newstep($event)" class="btn btn-info">
+            <button id="newButton" ng-click="new($event)" class="btn btn-info">
                 New
             </button>
         </div>

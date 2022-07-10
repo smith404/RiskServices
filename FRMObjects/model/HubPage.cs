@@ -2,7 +2,19 @@
 {
     public partial class HubPage : BaseModelObject
     {
+        public HubPage()
+        {
+            Title = "New Page";
+            Guid = "";
+            Headline = "New Headline";
+            Summary = "New Summary";
+            Image = "None";
+            Body = "New Body";
+            Url = "#";
+        }
+
         public long Id { get; set; }
+        public string Guid { get; set; }
         public string Title { get; set; } = null!;
         public string Headline { get; set; } = null!;
         public string Summary { get; set; } = null!;

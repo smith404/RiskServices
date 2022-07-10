@@ -59,7 +59,7 @@
             $scope.readNotifications();
         }, 20000);
 
-        search.init('/api/Home/GetSearchItems?domain=Home');
+        search.init('/api/Home/SearchItems?domain=Home');
 
         $("#search-input").keyup(function(e) {
             if (e.keyCode == 13) {

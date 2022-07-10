@@ -41,6 +41,10 @@ namespace FRMObjects
             {
                 entity.ToTable("HubPage");
 
+                entity.Property(e => e.Guid)
+                    .HasColumnName("GUID")
+                    .HasMaxLength(36);
+
                 entity.Property(e => e.Headline).HasMaxLength(255);
 
                 entity.Property(e => e.Image).HasMaxLength(255);
@@ -132,7 +136,7 @@ namespace FRMObjects
 
                 entity.Property(e => e.Guid)
                     .HasColumnName("GUID")
-                    .HasComputedColumnSql("(newid())", false);
+                    .HasMaxLength(36);
 
                 entity.Property(e => e.RequestedTimestamp).HasColumnType("datetime");
 
@@ -148,12 +152,6 @@ namespace FRMObjects
                     .HasMaxLength(1)
                     .IsUnicode(false)
                     .IsFixedLength();
-
-                entity.HasOne(d => d.ToolDefinition)
-                    .WithMany(p => p.ToolExecutionLogs)
-                    .HasForeignKey(d => d.ToolDefinitionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ToolExecutionLog_ToolDefinition");
             });
 
             modelBuilder.Entity<ToolStep>(entity =>
@@ -182,18 +180,6 @@ namespace FRMObjects
                 entity.HasKey(e => new { e.ToolDefinitionId, e.ToolStepId });
 
                 entity.ToTable("ToolStepConfig");
-
-                entity.HasOne(d => d.ToolDefinition)
-                    .WithMany(p => p.ToolStepConfigs)
-                    .HasForeignKey(d => d.ToolDefinitionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ToolStepConfig_ToolDefinition");
-
-                entity.HasOne(d => d.ToolStep)
-                    .WithMany(p => p.ToolStepConfigs)
-                    .HasForeignKey(d => d.ToolStepId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ToolStepConfig_ToolStep");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -31,8 +31,8 @@ namespace FRMDesktop.Controllers
             if (id == -1)
             {
                 step = new();
-                string? userName = HttpContext.User.Identity?.Name;
-                step.Description = (userName != null) ? userName : "Unknown User";
+                //string? userName = HttpContext.User.Identity?.Name;
+                //step.Description = (userName != null) ? userName : "Unknown User";
             }
             else
             {
@@ -99,6 +99,13 @@ namespace FRMDesktop.Controllers
         {
             using (FRP_LandingContext context = new())
             {
+                // Set the system fields
+                item.Guid = Guid.NewGuid().ToString();
+                string? userName = HttpContext.User.Identity?.Name;
+                item.Requestor = (userName != null) ? userName : "Unknown User";
+                item.Status = "Q";
+                item.RequestedTimestamp = DateTime.Now;
+
                 context.ToolExecutionLogs.Add(item);
                 int count = context.SaveChanges();
 

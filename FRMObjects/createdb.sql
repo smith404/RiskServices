@@ -1,14 +1,18 @@
 
 CREATE TABLE [dbo].[HubPage] (
     [Id]       BIGINT         IDENTITY (1000, 1) NOT NULL,
+    [GUID]     CHAR (36)      DEFAULT (newid()) NOT NULL,
     [Title]    NVARCHAR (255) NOT NULL,
     [Headline] NVARCHAR (255) NOT NULL,
     [Summary]  NVARCHAR (MAX) NOT NULL,
     [Image]    NVARCHAR (255) NOT NULL,
     [Body]     NVARCHAR (MAX) NOT NULL,
-    [URL]      NVARCHAR (255) NULL,
+    [URL]      NVARCHAR (255) NOT NULL,
     CONSTRAINT [PK_HubPage] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [Index_1]
+    ON [dbo].[HubPage]([GUID] ASC);
 
 CREATE TABLE [dbo].[HubPageSection] (
     [Id]        BIGINT         IDENTITY (1000, 1) NOT NULL,
@@ -60,10 +64,10 @@ CREATE TABLE [dbo].[ToolStep] (
 
 CREATE TABLE [dbo].[ToolExecutionLog] (
     [Id]                 BIGINT         IDENTITY (1000, 1) NOT NULL,
+    [GUID]               CHAR(36)       DEFAULT (newid()) NOT NULL,
     [ToolDefinitionId]   BIGINT         NOT NULL,
-    [Requestor]          AS             (original_login()),
+    [Requestor]          NVARCHAR (255) DEFAULT (original_login()) NOT NULL,
     [RunConfiguration]   NVARCHAR (MAX) NOT NULL,
-    [GUID]               AS             (newid()),
     [Persist]            BIT            NOT NULL,
     [ExitOnFail]         BIT            NOT NULL,
     [Status]             CHAR (1)       NOT NULL,
@@ -74,8 +78,8 @@ CREATE TABLE [dbo].[ToolExecutionLog] (
     CONSTRAINT [PK_ToolExecutionLog] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_ToolExecutionLog_ToolDefinition] FOREIGN KEY ([ToolDefinitionId]) REFERENCES [dbo].[ToolDefinition] ([Id])
 );
-
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ToolExecutionLog_GUID]
+GO
+CREATE NONCLUSTERED INDEX [Index_1]
     ON [dbo].[ToolExecutionLog]([GUID] ASC);
 
 CREATE TABLE [dbo].[ToolStepConfig] (

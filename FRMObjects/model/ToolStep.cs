@@ -4,7 +4,13 @@
     {
         public ToolStep()
         {
-            ToolStepConfigs = new HashSet<ToolStepConfig>();
+            Id = 0;
+            Description = "New Step";
+            StepType = "TBD";
+            TestObject = "{}";
+            DatasetName = "TBD";
+            Message = "New Step";
+            Format = "TBD";
         }
 
         public long Id { get; set; }
@@ -19,7 +25,5 @@
         public string Message { get; set; } = null!;
         public string Format { get; set; } = null!;
         public bool Active { get; set; }
-
-        public virtual ICollection<ToolStepConfig> ToolStepConfigs { get; set; }
     }
 }

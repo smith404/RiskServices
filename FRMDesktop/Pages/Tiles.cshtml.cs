@@ -1,13 +1,14 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FRMDesktop.Pages
 {
-    public class PageEditorModel : PageModel
+    public class TilesModel : PageModel
     {
         // requires using Microsoft.Extensions.Configuration;
         private readonly IConfiguration Configuration;
 
-        public PageEditorModel(IConfiguration configuration)
+        public TilesModel(IConfiguration configuration)
         {
             Configuration = configuration;
             PageId = "";

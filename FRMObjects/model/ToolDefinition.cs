@@ -4,8 +4,10 @@
     {
         public ToolDefinition()
         {
-            ToolExecutionLogs = new HashSet<ToolExecutionLog>();
-            ToolStepConfigs = new HashSet<ToolStepConfig>();
+            ToolName = "New Tool";
+            Description = "New Tool";
+            Url = "#";
+            Status = "A";
         }
 
         public long Id { get; set; }
@@ -14,8 +16,5 @@
         public string? Url { get; set; }
         public byte Version { get; set; }
         public string Status { get; set; } = null!;
-
-        public virtual ICollection<ToolExecutionLog> ToolExecutionLogs { get; set; }
-        public virtual ICollection<ToolStepConfig> ToolStepConfigs { get; set; }
     }
 }

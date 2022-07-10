@@ -15,7 +15,27 @@ namespace FRMDesktop.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetSearchItems")]
+        [HttpGet("SearchItem")]
+        public SearchItem? GetSearchItems(long id)
+        {
+            SearchItem? item;
+
+            if (id == -1)
+            {
+                item = new();
+            }
+            else
+            {
+                using (FRP_LandingContext context = new())
+                {
+                    item = context.SearchItems.Find(id);
+                }
+            }
+
+            return item;
+        }
+
+        [HttpGet("SearchItems")]
         public List<SearchItem> GetSearchItems(string domain)
         {
             try
@@ -30,11 +50,12 @@ namespace FRMDesktop.Controllers
             {
                 _logger.LogError(ex.Message);
             }
+
             return new List<SearchItem>();
         }
 
-        [HttpPost("WriteSearchItem")]
-        public SearchItem WriteSearchItems(SearchItem item)
+        [HttpPost("SearchItem")]
+        public SearchItem PostSearchItems(SearchItem item)
         {
             try
             {
@@ -48,11 +69,12 @@ namespace FRMDesktop.Controllers
             {
                 _logger.LogError(ex.Message);
             }
+
             return item;
         }
 
-        [HttpPut("UpdateSearchItem")]
-        public SearchItem UpdateSearchItems(SearchItem item)
+        [HttpPut("SearchItem")]
+        public SearchItem PutSearchItems(SearchItem item)
         {
             try
             {
@@ -66,6 +88,7 @@ namespace FRMDesktop.Controllers
             {
                 _logger.LogError(ex.Message);
             }
+
             return item;
         }
 
@@ -103,6 +126,7 @@ namespace FRMDesktop.Controllers
             {
                 _logger.LogError(ex.Message);
             }
+
             return new List<Notification>();
         }
     }
