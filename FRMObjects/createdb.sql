@@ -1,4 +1,3 @@
-
 CREATE TABLE [dbo].[HubPage] (
     [Id]       BIGINT         IDENTITY (1000, 1) NOT NULL,
     [GUID]     CHAR (36)      DEFAULT (newid()) NOT NULL,
@@ -13,7 +12,7 @@ CREATE TABLE [dbo].[HubPage] (
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [Index_1]
     ON [dbo].[HubPage]([GUID] ASC);
-
+GO
 CREATE TABLE [dbo].[HubPageSection] (
     [Id]        BIGINT         IDENTITY (1000, 1) NOT NULL,
     [HubPageId] BIGINT         NOT NULL,
@@ -26,7 +25,7 @@ CREATE TABLE [dbo].[HubPageSection] (
     CONSTRAINT [PK_HubPageSection] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_HubPageSection_HubPage] FOREIGN KEY ([HubPageId]) REFERENCES [dbo].[HubPage] ([Id])
 );
-
+GO
 CREATE TABLE [dbo].[SearchItem] (
     [Id]         BIGINT         IDENTITY (1000, 1) NOT NULL,
     [Title]      NVARCHAR (50)  NOT NULL,
@@ -35,7 +34,7 @@ CREATE TABLE [dbo].[SearchItem] (
     [TargetType] NVARCHAR (12)  NOT NULL,
     [Target]      NVARCHAR (255) NOT NULL
 );
-
+GO
 CREATE TABLE [dbo].[ToolDefinition] (
     [Id]          BIGINT         IDENTITY (1000, 1) NOT NULL,
     [ToolName]    NVARCHAR (50)  NOT NULL,
@@ -45,7 +44,7 @@ CREATE TABLE [dbo].[ToolDefinition] (
     [Status]      CHAR (1)       DEFAULT ((1)) NOT NULL,
     CONSTRAINT [PK_ToolDefinition] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
+GO
 CREATE TABLE [dbo].[ToolStep] (
     [Id]          BIGINT         IDENTITY (1, 1) NOT NULL,
     [Description] NVARCHAR (255) NOT NULL,
@@ -61,7 +60,7 @@ CREATE TABLE [dbo].[ToolStep] (
     [Active]      BIT            NOT NULL,
     CONSTRAINT [PK_ToolStep] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
-
+GO
 CREATE TABLE [dbo].[ToolExecutionLog] (
     [Id]                 BIGINT         IDENTITY (1000, 1) NOT NULL,
     [GUID]               CHAR(36)       DEFAULT (newid()) NOT NULL,
@@ -81,7 +80,7 @@ CREATE TABLE [dbo].[ToolExecutionLog] (
 GO
 CREATE NONCLUSTERED INDEX [Index_1]
     ON [dbo].[ToolExecutionLog]([GUID] ASC);
-
+GO
 CREATE TABLE [dbo].[ToolStepConfig] (
     [ToolDefinitionId] BIGINT  NOT NULL,
     [ToolStepId]       BIGINT  NOT NULL,
@@ -91,7 +90,7 @@ CREATE TABLE [dbo].[ToolStepConfig] (
     CONSTRAINT [FK_ToolStepConfig_ToolDefinition] FOREIGN KEY ([ToolDefinitionId]) REFERENCES [dbo].[ToolDefinition] ([Id]),
     CONSTRAINT [FK_ToolStepConfig_ToolStep] FOREIGN KEY ([ToolStepId]) REFERENCES [dbo].[ToolStep] ([Id])
 );
-
+GO
 CREATE TABLE [dbo].[Notifications] (
     [Id]          BIGINT         IDENTITY (1, 1) NOT NULL,
     [Type]        NVARCHAR (50)  NOT NULL,
@@ -105,3 +104,4 @@ CREATE TABLE [dbo].[Notifications] (
     [ProcessedOn] DATETIME       NULL,
     CONSTRAINT [PK_Notifications] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+GO
