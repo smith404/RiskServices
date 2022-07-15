@@ -6,6 +6,7 @@ using Microsoft.Identity.Web.UI;
 var builder = WebApplication.CreateBuilder(args);
 
 // Set up the environment
+// https://stackoverflow.com/questions/31453495/how-to-read-appsettings-values-from-a-json-file-in-asp-net-core
 string keyString = builder.Configuration.GetValue<string>("sync-vars");
 string[] keys = keyString.Split(';');
 foreach (string key in keys)
