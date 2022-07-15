@@ -7,6 +7,8 @@ CREATE TABLE [dbo].[HubPage] (
     [Image]    NVARCHAR (255) NOT NULL,
     [Body]     NVARCHAR (MAX) NOT NULL,
     [URL]      NVARCHAR (255) NOT NULL,
+    [Owner]    NVARCHAR (255) NOT NULL,
+    [Status]   CHAR (1)       NOT NULL,
     CONSTRAINT [PK_HubPage] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 GO
@@ -32,7 +34,7 @@ CREATE TABLE [dbo].[SearchItem] (
     [Keywords]   NVARCHAR (MAX) NOT NULL,
     [Summary]    NVARCHAR (90)  NOT NULL,
     [TargetType] NVARCHAR (12)  NOT NULL,
-    [Target]      NVARCHAR (255) NOT NULL
+    [Target]     NVARCHAR (255) NOT NULL
 );
 GO
 CREATE TABLE [dbo].[ToolDefinition] (

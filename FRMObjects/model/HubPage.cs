@@ -11,6 +11,8 @@
             Image = "None";
             Body = "New Body";
             Url = "#";
+            Owner = "";
+            Status = "A";
         }
 
         public long Id { get; set; }
@@ -21,5 +23,8 @@
         public string Image { get; set; } = null!;
         public string Body { get; set; } = null!;
         public string? Url { get; set; }
+        public string Owner { get; set; } = null!;
+        public string Status { get; set; } = null!;
+
     }
 }
