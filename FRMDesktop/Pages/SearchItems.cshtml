@@ -1,0 +1,172 @@
+﻿@page
+@model FRMDesktop.Pages.SearchItemsModel
+@{
+    ViewData["Title"] = "Search Items";
+}
+<style>
+table
+{
+    border-collapse: collapse;
+    width: 100%;
+}
+td
+{
+    text-align: left;
+    padding: 8px;
+    color: black;
+}
+tr:nth-child(even){background-color: Snow;}
+th
+{
+    padding: 8px;
+    text-align: left;
+    background-color: DodgerBlue;
+    color: white;
+}
+</style>
+<script>
+    app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.readNotifications = function() {
+            $http.get($scope.notifictionURL).
+            then(function(response) {
+                $scope.notificationCount = response.data;
+            });
+        }
+        $scope.readNotifications();
+        $interval(function () {
+            $scope.readNotifications();
+        }, 20000);
+
+        hideAlerts();
+
+        $scope.items = []
+        $http.get('/api/Home/AllSearchItems').
+        then(function(response) {
+            $scope.items = response.data;
+            readItems();
+        });
+
+        $scope.EditItem = function(id) {
+            let result = $scope.items.find(({ id }) => id === id);
+        }
+
+        function readItems()
+        {
+            taskstable = $('#thesearchitems')
+                .DataTable({
+                    "processing": true,
+                    "data": $scope.items,
+                    "columns": [{
+                        "data": "id",
+                        "render": function(data,
+                            type, row, meta) {
+                            if (type === 'display') {
+                                data = '<button class="btn btn-secondary" data-id="' + data + '"onclick="angular.element(this).scope().EditItem(' + data + ')">Edit</button>';
+                            }
+                            return data;
+                        }
+                    }, {
+                        "data": "domain",
+                        "width": "15%"
+                    }, {
+                        "data": "title"
+                    }, {
+                        "data": "targetType",
+                        "render": function(data,
+                            type, row, meta) {
+                            if (type === 'display') {
+                                data = '<label class="label label-' + data.toLowerCase() + '">' + data + '</label>';
+                            }
+                            return data;
+                        }
+                    }, {
+                        "data": "target"
+                    }]
+                })
+        };
+
+        $scope.update = function(item)
+        {
+            let method = "PUT";
+            if (item.id == 0) {
+                method = "POST";
+            }
+
+            let request_object = angular.toJson(item);
+            $http({
+                method: method,
+                url: '/api/Home/SearchItem',
+                data: request_object,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response)
+                {
+                    item = response.data;
+                    _success(response.data);
+                }, function errorCallback(response)
+                {
+                    _error(response)
+                })
+        };
+    });
+</script>
+<div role="main" class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h4>The Search Items</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col" style="padding-top: 30px; padding-bottom: 30px;">
+            <table class="display compact" id="thesearchitems" style="width:100%; padding-top: 10px;">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Domain</th>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Target</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button id="newButton" ng-click="new($event)" class="btn btn-info">
+                New
+            </button>
+            <button id="reloadButton" ng-click="reload($event)" class="btn btn-info">
+                Reload
+            </button>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 10px">
+        <div class="col">
+            <div class="alert alert-success" id="success-alert">
+                <strong>Success!</strong> step is updated.
+            </div>
+            <div class="alert alert-warning" id="error-alert">
+                <strong>Warning!</strong> Changes were not saved.
+            </div>
+        </div>
+    </div>
+    <div id="search-item-dialog" class="modal modal-lg fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fa fa-terminal fa-fw"></i>Results</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <textarea id="output" class="form-control" ng-model="step.resultOutput" rows="20" readonly>
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

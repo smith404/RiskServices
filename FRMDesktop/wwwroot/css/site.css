@@ -31,8 +31,10 @@ body {
 }
 
 .search-result {
+    display: flex !important;
     border-radius: 15px;
     margin: 5px;
+    height: 100%;
 }
 
 .search-result h3 {
@@ -40,6 +42,15 @@ body {
     color: #1E0FBE;
 }
 
+.search-pill {
+    position: absolute;
+    bottom: 0;
+}
+
+.search-text {
+    position: relative;
+    flex: 2;
+}
 .search-result .search-link {
     color: #006621;
 }
@@ -48,6 +59,18 @@ body {
     margin-top: 5px;
 }
 
+.search-results-image-container {
+    flex: 1;
+}
+
+.search-results-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
+    -moz-box-shadow: 0 1px 2px rgba(34,25,25,0.4);
+    -webkit-box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
+}
 .search-results-include {
     background-color: rgb(251, 251, 251);
     border-bottom: 1px solid rgb(204, 204, 204);
@@ -103,7 +126,7 @@ body {
 
 .search-results-include-grid-item-summary {
     font-size: 0.9rem;
-    margin-bottom: 6px;
+    margin-bottom: 40px;
 }
 
 .is-hidden {

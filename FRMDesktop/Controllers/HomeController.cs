@@ -35,6 +35,25 @@ namespace FRMDesktop.Controllers
             return item;
         }
 
+        [HttpGet("AllSearchItems")]
+        public List<SearchItem> GetSearchItems()
+        {
+            try
+            {
+                using (FRP_LandingContext context = new())
+                {
+                    return context.SearchItems.ToList();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return new List<SearchItem>();
+        }
+
         [HttpGet("SearchItems")]
         public List<SearchItem> GetSearchItems(string domain)
         {

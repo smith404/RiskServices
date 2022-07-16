@@ -26,15 +26,22 @@
         document.querySelector('.search-results-include').classList.toggle('is-hidden', results.length === 0);
         const render = d => `
                 <div class="search-result">
+                <div class="search-text">
                 <a href="${d.target}">
                 <h5>${d.title}</h5>
                 </a>
                 <div class="search-results-include-grid-item-summary">
                 ${d.summary && d.summary.length > 0 ? d.summary : "No summary found for this page"}...
                 </div>
+                <div class="search-pill">
                 <span class="label label-${d.targetType.toLowerCase()}">
                 ${d.targetType}
                 </span>
+                </div>
+                </div>
+                <div class="search-results-image-container">
+                <img class="search-results-image" src="${d.image}" alt="No Image Found"/>
+                </div>
                 </div>
             `;
         document.querySelector('.search-results-include-grid').innerHTML = results.map(render).join('');
@@ -72,10 +79,10 @@
     });
 </script>
 <div class="container-fluid" role="main">
-    <div class="row" style="padding-top: 100px">
+    <div class="row" style="padding-top: 200px">
         <div class="col">
             <h4>Financial Risk Management Hub</h4>
-            <h6>Search for help or find the tools you need for your task raise a support request</h6>
+            <h6>Search for help or find the tools you need...</h6>
         </div>
     </div>
     <div class="row">
