@@ -18,6 +18,7 @@
         public string StepType { get; set; } = null!;
         public string Definition { get; set; } = null!;
         public string? TestObject { get; set; }
+        public bool FailOnExit { get; set; }
         public bool InMemory { get; set; }
         public bool HasInput { get; set; }
         public bool HasOutput { get; set; }

@@ -5,6 +5,7 @@
         public long Id { get; set; }
         public string Domain { get; set; } = null!;
         public string Title { get; set; } = null!;
+        public string Image { get; set; } = null!;
         public string Keywords { get; set; } = null!;
         public string Summary { get; set; } = null!;
         public string TargetType { get; set; } = null!;

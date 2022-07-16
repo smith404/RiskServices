@@ -5,12 +5,24 @@
 }
 <script>
     app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        $scope.notifications = [];
         // Keep the notifications up-to-date
         $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
         $scope.readNotifications = function() {
             $http.get($scope.notifictionURL).
             then(function(response) {
                 $scope.notificationCount = response.data;
+                $http.get('/api/Home/GetNotifiations?user=' + document.getElementById('current-user').innerHTML).
+                then(function(response) {
+                    $scope.notifications = response.data;
+                    $scope.notifications.forEach(element => {
+                        let createdOn = new Date(element.createdOn)
+                        element.fromString = "From: <B>" + element.sender + "</B> at <I>"
+                            + createdOn.toLocaleTimeString() + " on " 
+                            + createdOn.toLocaleDateString() + "</I>";
+                    });
+                });
+                
             });
         }
         $scope.readNotifications();
@@ -18,16 +30,12 @@
             $scope.readNotifications();
         }, 20000);
 
-        $scope.notifications = [];
-
-        $http.get('/api/Home/GetNotifiations?user=' + document.getElementById('current-user').innerHTML).
-        then(function(response) {
-            $scope.notifications = response.data;
-        });
-
         $scope.processNotification = function(id)
         {
         };
+
+        // Alert types
+        // alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info, alert-light, alert-dark
     });
 </script>
 <div role="main" class="container-fluid">
@@ -36,21 +44,30 @@
             <h4>My Notifications</h4>
         </div>
     </div>
-
-    <div class="row" ng-repeat="notification in notifications ">
-        <div class="col" ng-class="notification.type">
-            <div class="container">
-                <div class="alert-icon">
-                    <i class="fa" ng-class="notification.icon"></i>
-                </div>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                        ng-click="processNotification(notification.id">
-                    <span aria-hidden="true"><i class="fa fa-check-square"></i></span>
-                </button>
-                <span ng-bind-html="notification.message">the message</span>
-                <br>
-                <a ng-if="notification.url != ''" ng-href="{{notification.url}}">Click here to follow</a>
-            </div>
+    <hr />
+    <div ng-repeat="notification in notifications ">
+        <div class="alert" ng-class="notification.type">
+            <table style="width: 100%">
+            <tr>
+                <td style="width:5%"><i class="fa fa-xl" ng-class="notification.icon"></i></td>
+                <td style="width:60%">
+                    <div ng-if="notification.url.trim().length == 0" ng-bind-html="notification.message">
+                        message
+                    </div>
+                    <div ng-if="notification.url.trim().length != 0">
+                        <a ng-href="{{notification.url}}"  ng-bind-html="notification.message">link</a>
+                    </div>
+                </td>
+                <td style="width:25%">
+                    <div ng-bind-html="notification.fromString">
+                        message
+                    </div>
+                </td>
+                <td style="width:10%">
+                    <a href="#" class="btn btn-primary dismiss-notification" style="float: right;">Dismiss</a>
+                </td>
+            </tr>
+            </table>
         </div>
     </div>
 </div>

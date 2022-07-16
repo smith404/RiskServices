@@ -66,10 +66,11 @@
 
         $scope.exec = function(event)
         {
-            $http.get(serverRoot + 'ToolStepOperations?id=').
-            then(function(response) {
-                $scope.step.resultOutput = response.data.resultOutput;
-            });
+            $("#reslts-dialog").modal("show");
+            //$http.get(serverRoot + 'ToolStepOperations?id=').
+            //then(function(response) {
+            //    $scope.step.resultOutput = response.data.resultOutput;
+            //});
         };
     });
 </script>
@@ -81,7 +82,7 @@
     </div>
 
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
             <label for="thename">
                 <i class="fa fa-code fa-fw"></i>
                 Name
@@ -90,7 +91,7 @@
                 <input id="thename" type="text" class="form-control" ng-model="step.description">
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-8">
             <label for="stepname">
                 <i class="fa fa-sitemap fa-fw"></i>
                 Message
@@ -101,15 +102,6 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-2">
-            <label for="description">
-                <i class="fa fa-pencil-alt fa-fw"></i>
-                Type
-            </label>
-            <div class="input-group mb-3">
-                <input id="description" type="text" class="form-control" ng-model="step.stepType">
-            </div>
-        </div>
         <div class="col-4">
             <label for="prio">
                 <i class="fa fa-key fa-fw"></i>
@@ -119,13 +111,31 @@
                 <input id="prio" type="text" class="form-control" ng-model="step.datasetName">
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-1">
+            <label for="description">
+                <i class="fa fa-pencil-alt fa-fw"></i>
+                Type
+            </label>
+            <div class="input-group mb-3">
+                <input id="description" type="text" class="form-control" ng-model="step.stepType">
+            </div>
+        </div>
+        <div class="col-1">
             <label for="format">
                 <i class="fa fa-key fa-fw"></i>
-                Dataset Foramt
+                Format
             </label>
             <div class="input-group mb-3">
                 <input id="format" type="text" class="form-control" ng-model="step.format">
+            </div>
+        </div>
+        <div class="col">
+            <label for="input">
+                <i class="fa fa-key fa-fw"></i>
+                Fail on Exit
+            </label>
+            <div class="form-check form-switch">
+                <input id="input" class="form-check-input" type="checkbox" ng-model="step.failOnExit">
             </div>
         </div>
         <div class="col">
@@ -154,40 +164,44 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
-            <label for="body">
-                <i class="fa fa-file-code fa-fw"></i>
-                Step Defintion
-            </label>
-            <div class="input-group mb-3">
-                <textarea id="body" style="font-family: monospace; overflow: scroll;" class="form-control"
-                            ng-model="step.definition" rows="8" maxlength="4096">
-                </textarea>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-home-tab" data-bs-target="#tab-id-code" type="button" data-bs-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true">Step Defintion</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-home-tab" data-bs-target="#tab-id-test-object" type="button" data-bs-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true">Test Object</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="tab-id-code" role="tabpanel">
+                <div class="row">
+                    <div class="col">
+                        <label for="body">
+                            <i class="fa fa-file-code fa-fw"></i>
+                            Step Defintion
+                        </label>
+                        <div class="input-group mb-3">
+                            <textarea id="body" style="font-family: monospace; overflow: scroll;" class="form-control"
+                                        ng-model="step.definition" rows="16" maxlength="4096">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <label for="test-object">
-                <i class="fa fa-file-code fa-fw"></i>
-                Test Object
-            </label>
-            <div class="input-group mb-3">
-                <textarea id="test-object" style="font-family: monospace; overflow: scroll;" class="form-control"
-                            ng-model="step.testObject" rows="4" maxlength="4096">
-                </textarea>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <label for="output">
-                <i class="fa fa-terminal fa-fw"></i>
-                Results
-            </label>
-            <div class="input-group mb-3">
-                <textarea id="output" class="form-control" ng-model="step.resultOutput" rows="4" readonly>
-                </textarea>
+            <div class="tab-pane fade" id="tab-id-test-object" role="tabpanel">
+                <div class="row">
+                    <div class="col">
+                        <label for="test-object">
+                            <i class="fa fa-file-code fa-fw"></i>
+                            Test Object
+                        </label>
+                        <div class="input-group mb-3">
+                            <textarea id="test-object" style="font-family: monospace; overflow: scroll;" class="form-control"
+                                        ng-model="step.testObject" rows="16" maxlength="4096">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -211,6 +225,21 @@
             </div>
             <div class="alert alert-warning" id="error-alert">
                 <strong>Warning!</strong> Changes were not saved.
+            </div>
+        </div>
+    </div>
+    <div id="reslts-dialog" class="modal modal-lg fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fa fa-terminal fa-fw"></i>Results</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <textarea id="output" class="form-control" ng-model="step.resultOutput" rows="20" readonly>
+                        </textarea>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

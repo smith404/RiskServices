@@ -31,6 +31,7 @@ GO
 CREATE TABLE [dbo].[SearchItem] (
     [Id]         BIGINT         IDENTITY (1000, 1) NOT NULL,
     [Title]      NVARCHAR (50)  NOT NULL,
+    [Image]      NVARCHAR (255) NOT NULL,
     [Keywords]   NVARCHAR (MAX) NOT NULL,
     [Summary]    NVARCHAR (90)  NOT NULL,
     [TargetType] NVARCHAR (12)  NOT NULL,

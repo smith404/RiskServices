@@ -51,6 +51,14 @@ namespace FRMObjects
 
                 entity.Property(e => e.Title).HasMaxLength(255);
 
+                entity.Property(e => e.Owner).HasMaxLength(255);
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("((N))")
+                    .IsFixedLength();
+
                 entity.Property(e => e.Url)
                     .HasMaxLength(255)
                     .HasColumnName("URL");
@@ -109,6 +117,8 @@ namespace FRMObjects
                 entity.Property(e => e.TargetType).HasMaxLength(12);
 
                 entity.Property(e => e.Title).HasMaxLength(50);
+
+                entity.Property(e => e.Image).HasMaxLength(255);
             });
 
             modelBuilder.Entity<ToolDefinition>(entity =>

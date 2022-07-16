@@ -27,10 +27,10 @@
         const render = d => `
                 <div class="search-result">
                 <a href="${d.target}">
-                <h3>${d.title}</h3>
+                <h5>${d.title}</h5>
                 </a>
                 <div class="search-results-include-grid-item-summary">
-                ${d.summary && d.summary.length > 0 ? d.summary.substring(0, 90) : "No summary found for this page"}...
+                ${d.summary && d.summary.length > 0 ? d.summary : "No summary found for this page"}...
                 </div>
                 <span class="label label-${d.targetType.toLowerCase()}">
                 ${d.targetType}
