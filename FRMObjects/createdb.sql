@@ -71,7 +71,7 @@ CREATE TABLE [dbo].[ToolStep] (
 GO
 CREATE TABLE [dbo].[ToolExecutionLog] (
     [Id]                 BIGINT         IDENTITY (1000, 1) NOT NULL,
-    [GUID]               CHAR(36)       DEFAULT (newid()) NOT NULL,
+    [GUID]               CHAR (36)      DEFAULT (newid()) NOT NULL,
     [ToolDefinitionId]   BIGINT         NOT NULL,
     [Requestor]          NVARCHAR (255) DEFAULT (original_login()) NOT NULL,
     [RunConfiguration]   NVARCHAR (MAX) NOT NULL,
@@ -79,6 +79,7 @@ CREATE TABLE [dbo].[ToolExecutionLog] (
     [ExitOnFail]         BIT            NOT NULL,
     [Status]             CHAR (1)       NOT NULL,
     [StepNumber]         TINYINT        NOT NULL,
+    [LastDataUrl]        NVARCHAR (MAX) NOT NULL,
     [RequestedTimestamp] DATETIME       NOT NULL,
     [RunStartTimestamp]  DATETIME       NULL,
     [RunEndTimestamp]    DATETIME       NULL,

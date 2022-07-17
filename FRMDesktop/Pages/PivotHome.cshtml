@@ -1,0 +1,66 @@
+﻿@page
+@model FRMDesktop.Pages.PivotHomeModel
+@{
+    ViewData["Title"] = "Pivot Data";
+}
+<link rel="stylesheet" type="text/css" href="~/css/c3.min.css">
+<link rel="stylesheet" type="text/css" href="~/css/pivot.css" />
+<script>
+    let resultId = '@Model.ResultId';
+
+    app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        // Keep the notifications up-to-date
+        $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.readNotifications = function() {
+            $http.get($scope.notifictionURL).
+            then(function(response) {
+                $scope.notificationCount = response.data;
+            });
+        }
+        $scope.readNotifications();
+        $interval(function () {
+            $scope.readNotifications();
+        }, 20000);
+
+        $scope.createPivot = function(source)
+        {
+            Papa.parse(source, {
+                download: true,
+                skipEmptyLines: true,
+                complete: function(parsed){
+                    $("#output").pivotUI(parsed.data, { });
+                }
+            });
+        };
+
+        // ===== Start Main Execution =====
+        //$scope.renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.export_renderers);
+        $scope.derivers = $.pivotUtilities.derivers;
+        $scope.renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.d3_renderers);
+        $scope.result = {};
+
+        $http.get('/api/ToolOperations/ReadToolExecution?guid=' + resultId).
+        then(function(response) {
+            $scope.result = response.data;
+            $scope.createPivot($scope.result.lastDataUrl)
+        });
+        // ===== End Main Execution =====
+    });
+</script>
+<div class="container-fluid" role="main">
+    <div class="row">
+        <div class="col">
+            <h4>Pivot Result</h4>
+        </div>
+    </div>
+    <div class="row" style="padding: 30px 0 30px 0; height : 700px; overflow: auto;">
+        <div class="col">
+            <div id="output" style="margin: auto; margin-top: 0px; padding: 30px;"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="~/js/d3.min.js"></script>
+<script type="text/javascript" src="~/js/c3.min.js"></script>
+<script type="text/javascript" src="~/js/pivot.js"></script>
+<script type="text/javascript" src="~/js/papaparse.min.js"></script>
+<script type="text/javascript" src="~/js/export_renderers.js"></script>

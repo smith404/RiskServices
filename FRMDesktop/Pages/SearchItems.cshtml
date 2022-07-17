@@ -38,22 +38,9 @@ th
             $scope.readNotifications();
         }, 20000);
 
-        hideAlerts();
-
-        $scope.items = []
-        $http.get('/api/Home/AllSearchItems').
-        then(function(response) {
-            $scope.items = response.data;
-            readItems();
-        });
-
-        $scope.EditItem = function(id) {
-            let result = $scope.items.find(({ id }) => id === id);
-        }
-
-        function readItems()
+        $scope.readItems = function()
         {
-            taskstable = $('#thesearchitems')
+            $scope.itemtable = $('#thesearchitems')
                 .DataTable({
                     "processing": true,
                     "data": $scope.items,
@@ -62,7 +49,7 @@ th
                         "render": function(data,
                             type, row, meta) {
                             if (type === 'display') {
-                                data = '<button class="btn btn-secondary" data-id="' + data + '"onclick="angular.element(this).scope().EditItem(' + data + ')">Edit</button>';
+                                data = '<button class="btn btn-secondary" data-id="' + data + '"onclick="angular.element(this).scope().editItem(' + data + ')">Edit</button>';
                             }
                             return data;
                         }
@@ -86,14 +73,55 @@ th
                 })
         };
 
-        $scope.update = function(item)
+        $scope.refreshItems = function(refreshTable)
+        {
+            $http.get('/api/Home/AllSearchItems').
+            then(function(response) {
+                $scope.items = response.data;
+                $scope.selectedItem = {}
+                if (refreshTable) {
+                    $scope.itemtable.clear().rows.add($scope.items).draw();
+                }
+                else {
+                    $scope.readItems();
+                }
+            });
+        }
+
+        // ===== Start Main Execution =====
+        hideAlerts();
+
+        $scope.selectedItem = {};
+        $scope.items = [];
+
+        $scope.refreshItems(false);
+        // ===== End Main Execution =====
+
+        $scope.new = function() {
+            $scope.selectedItem = {}
+            $("#search-item-dialog").modal("show");
+        }
+
+        $scope.editItem = function(id) {
+            $scope.selectedItem = $scope.items.find(element => element.id == id);
+            // Needed as the function call is not tracked my angularjs
+            $scope.$apply();
+            $("#search-item-dialog").modal("show");
+        }
+
+        $scope.hideDialog = function()
+        {
+            $('#search-item-dialog').modal('hide');
+        }
+
+        $scope.saveItem = function()
         {
             let method = "PUT";
-            if (item.id == 0) {
+            if ($scope.selectedItem .id == 0) {
                 method = "POST";
             }
 
-            let request_object = angular.toJson(item);
+            let request_object = angular.toJson($scope.selectedItem );
             $http({
                 method: method,
                 url: '/api/Home/SearchItem',
@@ -103,8 +131,8 @@ th
                 }
             }).then(function successCallback(response)
                 {
-                    item = response.data;
-                    _success(response.data);
+                    $scope.selectedItem = response.data;
+                    $scope.hideDialog()
                 }, function errorCallback(response)
                 {
                     _error(response)
@@ -135,10 +163,10 @@ th
     </div>
     <div class="row">
         <div class="col">
-            <button id="newButton" ng-click="new($event)" class="btn btn-info">
+            <button id="newButton" ng-click="new()" class="btn btn-info">
                 New
             </button>
-            <button id="reloadButton" ng-click="reload($event)" class="btn btn-info">
+            <button id="reloadButton" ng-click="refreshItems(true)" class="btn btn-info">
                 Reload
             </button>
         </div>
@@ -153,17 +181,80 @@ th
             </div>
         </div>
     </div>
-    <div id="search-item-dialog" class="modal modal-lg fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div id="search-item-dialog" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fa fa-terminal fa-fw"></i>Results</h5>
+                    <h4 class="modal-title">Search Item Detial</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <textarea id="output" class="form-control" ng-model="step.resultOutput" rows="20" readonly>
-                        </textarea>
-                    </div>
+                    <form>
+                        <div class="row form-group">
+                            <div class="col form-group">
+                                <label for="selectedItem.title">Title:</label>
+                                <input id="selectedItem.title" ng-model="selectedItem.title" type="text" class="form-control"
+                                       required>
+                            </div>
+                            <div class="col form-group">
+                                <label for="selectedItem.image">Image:</label>
+                                <input id="selectedItem.image" ng-model="selectedItem.image" type="text"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col form-group">
+                                <label for="selectedItem.summary">Summary:</label>
+                                <input id="selectedItem.image" ng-model="selectedItem.image" type="text"
+                                       class="form-control">
+                            </div>
+                            <div class="col form-group">
+                                <label for="costitem.amount">Value:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{{costitem.currency.symbol}}</span>
+                                    </div>
+                                    <input id="costitem.amount" ng-model="costitem.amount" type="number"
+                                           class="form-control" placeholder="Value">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col form-group">
+                                <label for="costitem.invoiceDate">Invoice Date:</label>
+                                <input id="costitem.invoiceDate" ng-model="costitem.invoiceDate" type="date"
+                                       class="form-control">
+                            </div>
+                            <div class="col form-group">
+                                <label for="costitem.costType">Type</label>
+                                <select ng-init="costitem.costType = costtypes[0]" class="form-control"
+                                        id="costitem.costType" ng-model="selectedItem.keywords"
+                                        ng-options="costtype as costtype.name for costtype in costtypes track by costtype.id">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col form-group">
+                                <label for="selectedItem.summary">Summary:</label>
+                                <input id="selectedItem.summary" ng-model="selectedItem.summary" type="text"
+                                       class="form-control" maxlength="90">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col form-group">
+                                <label for="selectedItem.keywords">Keywords:</label>
+                                <textarea id="selectedItem.keywords" ng-model="selectedItem.keywords" class="form-control"
+                                          rows="2"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button aria-label="Left Align" class="btn btn-secondary" ng-click="hideDialog()" data-dismiss="modal" type="button">
+                        <i class="fa fa-trash"></i> Cancel
+                    </button>
+                    <button aria-label="Left Align" class="btn btn-primary" ng-click="saveItem()" type="submit">
+                        <i class="fa fa-hand-point-right"></i> Save
+                    </button>
                 </div>
             </div>
         </div>
