@@ -45,7 +45,7 @@
         });
         // ===== End Main Execution =====
 
-        $scope.new = function(event)
+        $scope.newPage = function()
         {
             $http.get('/api/Page/Page?guid=new').
             then(function(response) {
@@ -127,14 +127,7 @@
         </div>
     </div>
     <div class="row">
-    <hr />
-        <div class="col">
-            <h5 class="card-title">Page Body</h5>
-        </div>
-    <hr />
-    </div>
-    <div class="row">
-        <div class="col">
+        <div class="col-3">
             <label for="page-title">
                 <i class="fa fa-heading"></i>
                 Page Title
@@ -143,9 +136,7 @@
                 <input id="page-title" type="text" class="form-control" ng-model="page.title">
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
+        <div class="col-3">
             <label for="page-headline">
                 <i class="fa fa-newspaper"></i>
                 Headline
@@ -154,9 +145,7 @@
                 <input id="page-headline" type="text" class="form-control" ng-model="page.headline">
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
+        <div class="col-3">
             <label for="page-image">
                 <i class="fa fa-image"></i>
                 Image
@@ -165,7 +154,7 @@
                 <input id="page-image" type="text" class="form-control" ng-model="page.image">
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-3">
             <label for="page-url">
                 <i class="fa fa-link"></i>
                 URL
@@ -196,7 +185,7 @@
             </label>
             <div class="input-group mb-3">
                 <textarea id="page-summary" style="overflow: scroll;" class="form-control"
-                            ng-model="page.body" rows="4" maxlength="4096">
+                            ng-model="page.body" rows="3" maxlength="4096">
                 </textarea>
             </div>
         </div>
@@ -206,7 +195,6 @@
         <div class="col">
             <h5 class="card-title">Page Sections</h5>
         </div>
-    <hr />
     </div>
     <div class="row">
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -217,7 +205,7 @@
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show" ng-repeat="section in sections" ng-attr-id="tab-id-{{section.id}}" ng-class="section.isActive" role="tabpanel">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-3">
                         <label for="page-title">
                             <i class="fa fa-heading"></i>
                             Section Title
@@ -226,9 +214,7 @@
                             <input id="page-title" type="text" class="form-control" ng-model="section.title">
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
+                    <div class="col-3">
                         <label for="page-headline">
                             <i class="fa fa-newspaper"></i>
                             Section Headline
@@ -237,9 +223,7 @@
                             <input id="page-headline" type="text" class="form-control" ng-model="section.headline">
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
+                    <div class="col-3">
                         <label for="page-image">
                             <i class="fa fa-image"></i>
                             Section Image
@@ -248,7 +232,7 @@
                             <input id="page-image" type="text" class="form-control" ng-model="section.image">
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-3">
                         <label for="page-url">
                             <i class="fa fa-link"></i>
                             Section URL
@@ -279,7 +263,7 @@
                         </label>
                         <div class="input-group mb-3">
                             <textarea id="page-summary" style="overflow: scroll;" class="form-control"
-                                        ng-model="section.body" rows="4" maxlength="4096">
+                                        ng-model="section.body" rows="3" maxlength="4096">
                             </textarea>
                         </div>
                     </div>
@@ -295,6 +279,9 @@
             </button>
             <button id="newButton" ng-click="newSection()" class="btn btn-info">
                 New Section
+            </button>
+            <button id="newButton" ng-click="newPage()" class="btn btn-info">
+                New Page
             </button>
         </div>
     </div>
