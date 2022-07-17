@@ -5,11 +5,6 @@
         public HubPageSection()
         {
             Title = "New Section";
-            Headline = "New Headline";
-            Summary = "New Summary";
-            Image = "None";
-            Body = "New Body";
-            Url = "#";
         }
 
         public long Id { get; set; }

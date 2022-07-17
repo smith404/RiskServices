@@ -35,6 +35,24 @@ namespace FRMDesktop.Controllers
             return page;
         }
 
+        [HttpGet("Pages")]
+        public List<HubPage> GetPages()
+        {
+            try
+            {
+                using (FRP_LandingContext context = new())
+                {
+                    return context.HubPages.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return new();
+        }
+
         [HttpPut("Page")]
         public HubPage PutPage(HubPage page)
         {

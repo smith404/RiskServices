@@ -29,8 +29,23 @@
             $scope.readNotifications();
         }, 20000);
 
-        $scope.processNotification = function(id)
+        $scope.processNotification = function(item)
         {
+            let request_object = angular.toJson(item);
+            $http({
+                method: "PUT",
+                url: '/api/Home/ProcessNotifiation',
+                data: request_object,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function successCallback(response)
+                {
+                    $scope.readNotifications();
+                }, function errorCallback(response)
+                {
+                    _error(response)
+                })
         };
 
         // Alert types
@@ -63,7 +78,7 @@
                     </div>
                 </td>
                 <td style="width:10%">
-                    <a href="#" class="btn btn-primary dismiss-notification" style="float: right;">Dismiss</a>
+                    <button class="btn btn-primary dismiss-notification" ng-click="processNotification(notification)" style="float: right;">Dismiss</button>
                 </td>
             </tr>
             </table>

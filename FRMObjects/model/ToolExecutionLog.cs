@@ -2,7 +2,7 @@
 {
     public partial class ToolExecutionLog : BaseModelObject
     {
-        public long Id { get; set; }
+        public long Id { get; set; } = 0;
         public string Guid { get; set; } = null!;
         public long ToolDefinitionId { get; set; }
         public string Requestor { get; set; } = null!;

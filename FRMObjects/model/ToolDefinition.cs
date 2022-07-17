@@ -5,12 +5,10 @@
         public ToolDefinition()
         {
             ToolName = "New Tool";
-            Description = "New Tool";
-            Url = "#";
-            Status = "A";
+            Status = "D";
         }
 
-        public long Id { get; set; }
+        public long Id { get; set; } = 0;
         public string ToolName { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string? Url { get; set; }

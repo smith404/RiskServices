@@ -1,0 +1,21 @@
+﻿table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td {
+    text-align: left;
+    padding: 8px;
+    color: black;
+}
+
+tr:nth-child(even) {
+    background-color: Snow;
+}
+
+th {
+    padding: 8px;
+    text-align: left;
+    background-color: DodgerBlue;
+    color: white;
+}

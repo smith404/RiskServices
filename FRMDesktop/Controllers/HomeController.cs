@@ -15,6 +15,12 @@ namespace FRMDesktop.Controllers
             _logger = logger;
         }
 
+        [HttpGet("NewSearchItem")]
+        public SearchItem? NewSearchItem()
+        {
+            return new();
+        }
+
         [HttpGet("SearchItem")]
         public SearchItem? GetSearchItems(long id)
         {
@@ -51,7 +57,7 @@ namespace FRMDesktop.Controllers
                 _logger.LogError(ex.Message);
             }
 
-            return new List<SearchItem>();
+            return new();
         }
 
         [HttpGet("SearchItems")]
@@ -138,6 +144,28 @@ namespace FRMDesktop.Controllers
                 using (FRP_LandingContext context = new())
                 {
                     return context.Notifications.Where(item => item.Owner == user && item.Processed == processed).ToList();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return new List<Notification>();
+        }
+
+        [HttpPut("ProcessNotifiation")]
+        public List<Notification> ProcessNotifiation(Notification item)
+        {
+            try
+            {
+                using (FRP_LandingContext context = new())
+                {
+                    item.Processed = true;
+                    item.ProcessedOn = DateTime.Now;
+                    context.Notifications.Update(item);
+                    int count = context.SaveChanges();
                 }
 
             }

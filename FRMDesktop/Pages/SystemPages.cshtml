@@ -1,0 +1,112 @@
+﻿@page
+@model FRMDesktop.Pages.SystemPagesModel
+@{
+    ViewData["Title"] = "System Pages";
+}
+<link rel="stylesheet" type="text/css" href="~/css/frm-table.css"/>
+<script>
+    app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        // Keep the notifications up-to-date
+        $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.readNotifications = function() {
+            $http.get($scope.notifictionURL).
+            then(function(response) {
+                $scope.notificationCount = response.data;
+            });
+        }
+        $scope.readNotifications();
+        $interval(function () {
+            $scope.readNotifications();
+        }, 20000);
+
+        $scope.readItems = function()
+        {
+            $scope.itemtable = $('#thepageitems')
+                .DataTable({
+                    "processing": true,
+                    "data": $scope.pages,
+                    "columns": [{
+                        "data": "guid",
+                        "render": function(data,
+                            type, row, meta) {
+                            if (type === 'display') {
+                                data = '<a class="btn btn-secondary" data-id="' + data + '"href="/PageEditor?guid=' + data + '">Edit</a>';
+                            }
+                            return data;
+                        }
+                    }, {
+                        "data": "title",
+                        "width": "15%"
+                    }, {
+                        "data": "headline"
+                    }, {
+                        "data": "owner"
+                    }, {
+                        "data": "url"
+                    }, {
+                        "data": "status"
+                    }]
+                })
+        };
+
+        $scope.refreshItems = function(refreshTable)
+        {
+            $http.get('/api/Page/Pages').
+            then(function(response) {
+                $scope.pages = response.data;
+                $scope.selectedItem = {}
+                if (refreshTable) {
+                    $scope.itemtable.clear().rows.add($scope.pages).draw();
+                }
+                else {
+                    $scope.readItems();
+                }
+            });
+        }
+
+        // ===== Start Main Execution =====
+        $scope.pages = [];
+        $scope.refreshItems(false);
+        // ===== End Main Execution =====
+
+        $scope.newPage = function()
+        {
+            $http.get('/api/Page/Pages?guid=new').
+            then(function(response) {
+                $scope.page = response.data;
+                $scope.sections = [];
+            });
+        };
+    });
+</script>
+<div role="main" class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h4>System Pages</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col" style="padding-top: 30px; padding-bottom: 30px;">
+            <table class="display compact" id="thepageitems" style="width:100%; padding-top: 10px;">
+                <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Title</th>
+                    <th>Headline</th>
+                    <th>Owner</th>
+                    <th>Target</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button id="newButton" ng-click="newPage()" class="btn btn-info">
+                New Page
+            </button>
+        </div>
+    </div>
+</div>
+

@@ -2,7 +2,7 @@
 {
     public partial class Notification : BaseModelObject
     {
-        public long Id { get; set; }
+        public long Id { get; set; } = 0;
         public string Type { get; set; } = null!;
         public string Icon { get; set; } = null!;
         public string Message { get; set; } = null!;

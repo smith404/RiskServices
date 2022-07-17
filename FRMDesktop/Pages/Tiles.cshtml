@@ -22,9 +22,9 @@
             $scope.readNotifications();
         }, 20000);
 
+        // ===== Start Main Execution =====
         $scope.page = {};
         $scope.sections = [];
-
         $http.get('/api/Page/Page?guid=' + pageId).
         then(function(response) {
             $scope.page = response.data;
@@ -33,6 +33,8 @@
                 $scope.sections = response.data;
             });
         });
+        // ===== End Main Execution =====
+
     });
 </script>
 <div class="frm-contents-layout">

@@ -66,8 +66,8 @@
             $scope.readNotifications();
         }, 20000);
 
+        // ===== Start Main Execution =====
         search.init('/api/Home/SearchItems?domain=Home');
-
         $("#search-input").keyup(function(e) {
             if (e.keyCode == 13) {
                 search.perfromServerSearch(e.target.value);
@@ -76,6 +76,7 @@
                 search.perfromLocalSearch(e.target.value)
             }
         });
+        // ===== End Main Execution =====
     });
 </script>
 <div class="container-fluid" role="main">

@@ -2,7 +2,7 @@
 {
     public partial class SearchItem : BaseModelObject
     {
-        public long Id { get; set; }
+        public long Id { get; set; } = 0;
         public string Domain { get; set; } = null!;
         public string Title { get; set; } = null!;
         public string Image { get; set; } = null!;

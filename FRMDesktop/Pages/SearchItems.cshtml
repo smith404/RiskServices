@@ -3,27 +3,7 @@
 @{
     ViewData["Title"] = "Search Items";
 }
-<style>
-table
-{
-    border-collapse: collapse;
-    width: 100%;
-}
-td
-{
-    text-align: left;
-    padding: 8px;
-    color: black;
-}
-tr:nth-child(even){background-color: Snow;}
-th
-{
-    padding: 8px;
-    text-align: left;
-    background-color: DodgerBlue;
-    color: white;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="~/css/frm-table.css"/>
 <script>
     app.controller("frmHubCtrl", function ($scope, $http, $interval) {
         $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
@@ -98,8 +78,11 @@ th
         // ===== End Main Execution =====
 
         $scope.new = function() {
-            $scope.selectedItem = {}
-            $("#search-item-dialog").modal("show");
+            $http.get('/api/Home/NewSearchItem').
+            then(function(response) {
+                $scope.selectedItem = response.data;
+                $("#search-item-dialog").modal("show");
+            });
         }
 
         $scope.editItem = function(id) {
@@ -121,7 +104,7 @@ th
                 method = "POST";
             }
 
-            let request_object = angular.toJson($scope.selectedItem );
+            let request_object = angular.toJson($scope.selectedItem);
             $http({
                 method: method,
                 url: '/api/Home/SearchItem',
@@ -143,7 +126,7 @@ th
 <div role="main" class="container-fluid">
     <div class="row">
         <div class="col">
-            <h4>The Search Items</h4>
+            <h4>System Search Entities</h4>
         </div>
     </div>
     <div class="row">
@@ -151,7 +134,7 @@ th
             <table class="display compact" id="thesearchitems" style="width:100%; padding-top: 10px;">
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Item</th>
                     <th>Domain</th>
                     <th>Title</th>
                     <th>Type</th>
@@ -203,40 +186,19 @@ th
                         </div>
                         <div class="row form-group">
                             <div class="col form-group">
-                                <label for="selectedItem.summary">Summary:</label>
-                                <input id="selectedItem.image" ng-model="selectedItem.image" type="text"
+                                <label for="selectedItem.domain">Domain:</label>
+                                <input id="selectedItem.domain" ng-model="selectedItem.domain" type="text"
                                        class="form-control">
                             </div>
                             <div class="col form-group">
-                                <label for="costitem.amount">Value:</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">{{costitem.currency.symbol}}</span>
-                                    </div>
-                                    <input id="costitem.amount" ng-model="costitem.amount" type="number"
-                                           class="form-control" placeholder="Value">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col form-group">
-                                <label for="costitem.invoiceDate">Invoice Date:</label>
-                                <input id="costitem.invoiceDate" ng-model="costitem.invoiceDate" type="date"
-                                       class="form-control">
+                                <label for="selectedItem.targetType">Target Type:</label>
+                                <input id="selectedItem.targetType" ng-model="selectedItem.targetType" type="text"
+                                        class="form-control" placeholder="Value">
                             </div>
                             <div class="col form-group">
-                                <label for="costitem.costType">Type</label>
-                                <select ng-init="costitem.costType = costtypes[0]" class="form-control"
-                                        id="costitem.costType" ng-model="selectedItem.keywords"
-                                        ng-options="costtype as costtype.name for costtype in costtypes track by costtype.id">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col form-group">
-                                <label for="selectedItem.summary">Summary:</label>
-                                <input id="selectedItem.summary" ng-model="selectedItem.summary" type="text"
-                                       class="form-control" maxlength="90">
+                                <label for="selectedItem.target">Target:</label>
+                                <input id="selectedItem.target" ng-model="selectedItem.target" type="text"
+                                        class="form-control" placeholder="Value">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -244,6 +206,13 @@ th
                                 <label for="selectedItem.keywords">Keywords:</label>
                                 <textarea id="selectedItem.keywords" ng-model="selectedItem.keywords" class="form-control"
                                           rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col form-group">
+                                <label for="selectedItem.summary">Summary:</label>
+                                <input id="selectedItem.summary" ng-model="selectedItem.summary" type="text"
+                                       class="form-control" maxlength="90">
                             </div>
                         </div>
                     </form>

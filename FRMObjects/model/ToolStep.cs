@@ -6,14 +6,9 @@
         {
             Id = 0;
             Description = "New Step";
-            StepType = "TBD";
-            TestObject = "{}";
-            DatasetName = "TBD";
-            Message = "New Step";
-            Format = "TBD";
         }
 
-        public long Id { get; set; }
+        public long Id { get; set; } = 0;
         public string Description { get; set; } = null!;
         public string StepType { get; set; } = null!;
         public string Definition { get; set; } = null!;

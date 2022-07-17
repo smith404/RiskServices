@@ -21,14 +21,15 @@
             $scope.readNotifications();
         }, 20000);
 
-        $scope.step = { };
-
+        // ===== Start Main Execution =====
         hideAlerts();
 
+        $scope.step = { };
         $http.get('/api/ToolOperations/ToolStep?id=' + stepId).
         then(function(response) {
             $scope.step = response.data;
         });
+        // ===== End Main Execution =====
 
         $scope.new = function(event)
         {

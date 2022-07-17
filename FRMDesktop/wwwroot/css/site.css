@@ -67,9 +67,9 @@ body {
     height: 100%;
     width: 100%;
     object-fit: cover;
-    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
-    -moz-box-shadow: 0 1px 2px rgba(34,25,25,0.4);
-    -webkit-box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
+    box-shadow: 0 3px 3px rgba(34, 25, 25, 0.4);
+    -moz-box-shadow: 0 3px 3px rgba(34,25,25,0.4);
+    -webkit-box-shadow: 0 3px 3px rgba(34, 25, 25, 0.4);
 }
 .search-results-include {
     background-color: rgb(251, 251, 251);
@@ -126,7 +126,7 @@ body {
 
 .search-results-include-grid-item-summary {
     font-size: 0.9rem;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .is-hidden {
@@ -189,8 +189,9 @@ body {
     background-color: #9A3D37;
 }
 
-.label-index {
+.label-site {
     background-color: #F1E4BA;
+    color: darkblue;
 }
 
 .label-red {
@@ -483,6 +484,7 @@ body {
     padding: 12px;
     height: 100%;
     color: rgb(28, 28, 28);
+    text-decoration: none !important;
 }
 
 .frm-contents-layout-tile-list > li > a:hover {
@@ -494,8 +496,8 @@ body {
 }
 
 .frm-contents-layout-tile-list > li h3 {
-    font-size: 1rem;
-    color: rgb(100, 100, 100);
+    font-size: 1.2rem;
+    color: darkblue;
     margin: 12px 0 8px 0;
 }
 
