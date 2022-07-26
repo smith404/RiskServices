@@ -229,7 +229,19 @@ CREATE TABLE [dbo].[AttributeMetadata] (
     [id_entity]         BIGINT        NOT NULL,
     [name]              VARCHAR (50)  NOT NULL,
     [description]       VARCHAR (250) NOT NULL,
+    [read_only]        BIT           NOT NULL,
     [depricated]        BIT           NOT NULL,
+    [display_value]        BIT           NOT NULL,
+    [filterable]        BIT           NOT NULL,
+    [searchable]        BIT           NOT NULL,
+    [required]        BIT           NOT NULL,
+    [hiddern]        BIT           NOT NULL,
+    [transient]        BIT           NOT NULL,
+    [unique]        BIT           NOT NULL,
+    [custom_object]        BIT           NOT NULL,
+    [custom_object_type]              VARCHAR (50)  NOT NULL,
+    [read_permission] VARCHAR (60) NOT NULL,
+    [write_permission] VARCHAR (60) NOT NULL,
     [id_attribute_type] BIGINT        NOT NULL,
     CONSTRAINT [PK_AttributeMetadata] PRIMARY KEY CLUSTERED ([id] ASC)
 );
@@ -238,6 +250,11 @@ CREATE TABLE [dbo].[AttributeType] (
     [id]        BIGINT       NOT NULL,
     [name]      VARCHAR (50) NOT NULL,
     [type_name] VARCHAR (50) NOT NULL,
+    [read_permission] VARCHAR (60) NOT NULL,
+    [admin_permission] VARCHAR (60) NOT NULL,
+    [update_permission] VARCHAR (60) NOT NULL,
+    [create_permission] VARCHAR (60) NOT NULL,
+    [delete_permission] VARCHAR (60) NOT NULL,
     CONSTRAINT [PK_AttributeType] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 GO
