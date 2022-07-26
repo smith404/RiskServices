@@ -7,12 +7,12 @@
     app.controller("frmHubCtrl", function ($scope, $http, $interval) {
         $scope.notifications = [];
         // Keep the notifications up-to-date
-        $scope.notifictionURL = '/api/Home/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.notifictionURL = '/api/Notification/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
         $scope.readNotifications = function() {
             $http.get($scope.notifictionURL).
             then(function(response) {
                 $scope.notificationCount = response.data;
-                $http.get('/api/Home/GetNotifiations?user=' + document.getElementById('current-user').innerHTML).
+                $http.get('/api/Notification/GetNotifiations?user=' + document.getElementById('current-user').innerHTML).
                 then(function(response) {
                     $scope.notifications = response.data;
                     $scope.notifications.forEach(element => {
@@ -77,8 +77,11 @@
                         message
                     </div>
                 </td>
-                <td style="width:10%">
-                    <button class="btn btn-primary dismiss-notification" ng-click="processNotification(notification)" style="float: right;">Dismiss</button>
+                <td style="width:5%">
+                    <button class="btn btn-primary dismiss-notification" ng-click="archiveNotification(notification)" style="float: right;">Archive</button>
+                </td>
+                <td style="width:5%">
+                    <button class="btn btn-primary dismiss-notification" ng-click="dismissNotification(notification)" style="float: right;">Dismiss</button>
                 </td>
             </tr>
             </table>

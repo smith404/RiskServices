@@ -1,0 +1,71 @@
+﻿@page
+@model FRMDesktop.Pages.ProfileModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+<script>
+    app.controller("frmHubCtrl", function ($scope, $http, $interval) {
+        $scope.notifications = [];
+        // Keep the notifications up-to-date
+        $scope.notifictionURL = '/api/Notification/GetNotifiationCount?user=' + document.getElementById('current-user').innerHTML;
+        $scope.readNotifications = function() {
+            $http.get($scope.notifictionURL).
+            then(function(response) {
+                $scope.notificationCount = response.data;
+                $http.get('/api/Notification/GetNotifiations?user=' + document.getElementById('current-user').innerHTML).
+                then(function(response) {
+                    $scope.notifications = response.data;
+                    $scope.notifications.forEach(element => {
+                        let createdOn = new Date(element.createdOn)
+                        element.fromString = "From: <B>" + element.sender + "</B> at <I>"
+                            + createdOn.toLocaleTimeString() + " on " 
+                            + createdOn.toLocaleDateString() + "</I>";
+                    });
+                });
+            });
+        }
+        $scope.readNotifications();
+        $interval(function () {
+            $scope.readNotifications();
+        }, 20000);
+
+        let userProfile = {};
+    });
+</script>
+<div role="main" class="container-fluid">
+    <div class="card" align="center">
+        <div align="center" class="card-header">
+            <h4 style="color:#00b1b1;"><span>{{userProfile.businessName}}</span></h4>
+            <h6><span>{{userProfile.resourceCode}}</span></h6>
+            <h6><span>{{userProfile.rank}}</span></h6>
+        </div>
+        <div class="card-title" style="margin-bottom: 0px;">
+            <div align="center" style="margin-top: 20px;">
+                <img alt="User Pic"
+                     class="rounded-circle img-fluid"
+                     id="profile-image"
+                     th:src="/images/nobodyf.jpg" />
+            </div>
+            <div class="col-sm-6">
+                <span>{{userProfile.businessTitle}}</span>
+            </div>
+        </div>
+        <div class="card-body" style="padding: 0px;">
+            <div class="clearfix"></div>
+            <hr style="margin:5px 0 5px 0;">
+
+            <div class="col-sm-5 col-xs-6 profile-title">First Name:</div>
+            <div class="col-sm-7 col-xs-6 "><span th:text="${irisuser.firstName}">{{userProfile.businessTitle}</span></div>
+
+            <div class="col-sm-5 col-xs-6 profile-title">Last Name:</div>
+            <div class="col-sm-7"><span th:text="${irisuser.lastName}">{{userProfile.businessTitle}</span></div>
+
+            <div class="col-sm-5 col-xs-6 profile-title">Email:</div>
+            <div class="col-sm-7"><span th:text="${irisuser.email}">{{userProfile.businessTitle}</span></div>
+
+            <div class="clearfix"></div>
+            <div class="profile-border"></div>
+
+        </div>
+    </div>
+</div>
