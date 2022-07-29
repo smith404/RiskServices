@@ -505,3 +505,136 @@ body {
     font-size: 0.9em;
     margin: 0 0 8px 0;
 }
+
+.info-article-layout {
+    margin: 0;
+    padding: 32px;
+    max-width: 1320px;
+    box-sizing: border-box;
+}
+
+.info-article-layout hi {
+    margin-top: 16px;
+    margin-bottom: 24px;
+    font-size: 76px;
+}
+
+.info-article-layout-sidebar {
+    box-sizing: border-box;
+    width: 320px;
+    padding: 12px 24px;
+    line-height: 1.5;
+    font-size: 14px;
+    float: left;
+    background-color: rgb(241, 241, 241);
+}
+
+.info-article-layout-sidebar-fixed {
+    position: fixed;
+    top: 32px;
+}
+
+.info-article-layout-sidebar > h2:first-child {
+    display: none;
+}
+
+.info-article-layout-sidebar > h2:nth-child(2) {
+    display: block;
+}
+
+.info-article-layout-sidebar-fixed > h2:first-child {
+    display: block;
+}
+
+.info-article-layout-sidebar-fixed > h2:nth-child(2) {
+    display: none;
+}
+
+.info-article-layout-sidebar .teams-link {
+    display: table;
+    margin-top: 25px;
+}
+
+.info-article-layout-sidebar .teams-link img {
+    width: 42px;
+    padding-right: 10px
+}
+
+.info-article-layout-sidebar .teams-link a {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.info-article-layout-toc {
+    padding: 0 0 0 16px;
+}
+
+.info-article-layout-content {
+    box-sizing: border-box;
+    width: 868px;
+    padding: 0 0 32px 0;
+    margin-left: 378px;
+    line-height: 1.33;
+}
+
+.info-article-layout-content > time {
+    font-size: 12px;
+}
+
+.info-article-layout-photo {
+    width: 600px;
+}
+
+.info-article-layout-content > table {
+    border-collapse: collapse;
+    margin: 32px;
+}
+
+.info-article-layout-content > table > thead > tr > th {
+    text-align: left;
+    font-size: 16px;
+    padding: 16px;
+    background-color: rgb(241, 241, 241);
+    border-top: solid 1px rgb(224, 224, 224);
+}
+
+.info-article-layout-content tr > :first-child {
+    border-left: solid 1px rgb(224, 224, 224);
+}
+
+.info-article-layout-content tr > :last-child {
+    border-right: solid 1px rgb(224, 224, 224);
+}
+
+.info-article-layout-content > table > tbody > tr {
+    vertical-align: top;
+}
+
+.info-article-layout-content tr > th {
+    margin: 0;
+    font-size: 16px;
+}
+
+.info-article-layout-content tr > td {
+    padding: 16px;
+    border-bottom: solid 1px rgb(224, 224, 224);
+}
+
+.info-article-layout-content .chart-include {
+    box-sizing: border-box;
+    border: solid 1px rgb(224, 224, 224);
+    margin: 32px;
+    width: 804px !important;
+}
+
+.info-article-layout-content .info-article-diagram {
+    box-sizing: border-box;
+    border: solid 1px rgb(224, 224, 224);
+    margin: 32px;
+    padding: 16px;
+}
+
+.info-article-layout-content .info-article-diagram > img {
+    box-sizing: border-box;
+    max-width: 772px !important;
+}

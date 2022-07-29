@@ -1,10 +1,24 @@
 ﻿@page
-@model FRMDesktop.Pages.TilesModel
+@model FRMDesktop.Pages.ArticleModel
 @{
     ViewData["Title"] = "Tool Step Detail";
 }
+<script type="text/javascript" src="~/js/toc.js"></script>
 <script>
     let pageId = '@Model.PageId';
+
+    app.directive('tocDirective', function($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attr) {
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        toc.init();
+                    });
+                }
+            }
+        };
+    });
 
     app.controller("frmHubCtrl", function ($scope, $http, $interval) {
         // Keep the notifications up-to-date
@@ -35,22 +49,21 @@
 
     });
 </script>
-<div class="frm-contents-layout">
-    <h1>{{page.title}}</h1>
-    <h4>{{page.summary}}</h4>
-    <div class="frm-contents-layout-content">
-        <ul class="frm-contents-layout-tile-list">
-            <li class="summary" ng-repeat="sec in sections">
-                <a href="#" ng-attr-target="{{(sec.newtab) ? '_blank' : undefined}}">
-                    <div class="frm-contents-layout-tile-image-container">
-                        <img ng-src="{{sec.image}}" alt="">
-                    </div>
-                    <h3 ng-bind-html="sec.title"></h3>
-                    <p ng-bind-html="sec.summary"></p>
-                </a>
-            </li>
-        </ul>
+<div class="info-article-layout">
+
+    <sidebar class="info-article-layout-sidebar">
+        <h2>{{page.title}}</h2>
+        <h2 id="summary">Synopsis</h2>
+        <p>{{page.summary}}</p>
+        <h2>Contents</h2>
+        <ol class="info-article-layout-toc"></ol>
+    </sidebar>
+
+    <div class="info-article-layout-content">
+        <h1>{{page.title}} <span class="label label-draft">Draft</span></h1>
+        <div ng-repeat="sec in sections" toc-directive>
+            <h2 id="body">{{sec.title}}</h2>
+            <p ng-bind-html="sec.body"></p>
+        </div>
     </div>
 </div>
-
-
