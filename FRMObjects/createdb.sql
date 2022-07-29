@@ -9,6 +9,8 @@ CREATE TABLE [dbo].[HubPage] (
     [URL]      NVARCHAR (255) NOT NULL,
     [Owner]    NVARCHAR (255) NOT NULL,
     [Status]   CHAR (1)       NOT NULL,
+    [UpdateBy] NVARCHAR (255) NOT NULL,
+    [UpdateAt] DATETIME       NOT NULL,
     CONSTRAINT [PK_HubPage] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 GO
@@ -250,11 +252,6 @@ CREATE TABLE [dbo].[AttributeType] (
     [id]        BIGINT       NOT NULL,
     [name]      VARCHAR (50) NOT NULL,
     [type_name] VARCHAR (50) NOT NULL,
-    [read_permission] VARCHAR (60) NOT NULL,
-    [admin_permission] VARCHAR (60) NOT NULL,
-    [update_permission] VARCHAR (60) NOT NULL,
-    [create_permission] VARCHAR (60) NOT NULL,
-    [delete_permission] VARCHAR (60) NOT NULL,
     CONSTRAINT [PK_AttributeType] PRIMARY KEY CLUSTERED ([id] ASC)
 );
 GO
@@ -265,5 +262,10 @@ CREATE TABLE [dbo].[EntityMetadata] (
     [depricated]  BIT           NOT NULL,
     [table_name]  VARCHAR (50)  NOT NULL,
     [id_key]      BIGINT        NOT NULL,
+    [admin_permission] VARCHAR (60) NOT NULL,
+    [read_permission] VARCHAR (60) NOT NULL,
+    [update_permission] VARCHAR (60) NOT NULL,
+    [create_permission] VARCHAR (60) NOT NULL,
+    [delete_permission] VARCHAR (60) NOT NULL,
     CONSTRAINT [PK_EntityMetadata] PRIMARY KEY CLUSTERED ([id] ASC)
 );
